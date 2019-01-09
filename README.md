@@ -71,7 +71,7 @@ New features in ES6:
       ```
    
 
-* Default parameter values
+#### Default parameter values
 
    ```
    function myFunction(x, y = 10) 
@@ -80,28 +80,194 @@ New features in ES6:
       return x + y;
    }
    myFunction(5); // will return 15
+
+   myFunction(5,undefined); // undefined equal to not pass, will return 15
+   myFunction(5, null); // null equal to pass y = 0, will return 5
+
    myFunction(5,1); // will return 6
+   
    ```
 
 
-* Arrow functions
+#### Arrow functions
   ```
   const x = (x, y) => { return x * y };
   ```
-  TODO: this
-  Arrow functions do not have their own this. They are not well suited for defining object methods.
 
    Arrow functions are not hoisted. They must be defined before they are used.
 
    Using const is safer than using var, because a function expression is always constant value.
 
-* Rest and spread operator
-* Destructuring
-* For..of Loops
-* Object Literal Extensions
+   `this`:
+   ```
+   var controller = {
+	makeRequest: function(..){
+		var self = this;
 
-* Array.find(), Array.findIndex()
-  
+		btn.addEventListener( "click", function(){
+			// ..
+			   self.makeRequest(..);
+		   }, false );
+	   }
+   };
+   ```
+   ```
+   var controller = {
+	makeRequest: function(..){
+		btn.addEventListener( "click", () => {
+			   // ..
+            this.makeRequest(..);
+         }, false );
+      }
+   };
+   ```
+   arrow functions is not a method for saving keystrokes, it is not appropriate for every situations:
+   So now we can conclude a more nuanced set of rules for when => is appropriate and not:
+
+   * If you have a short, single-statement inline function expression, where the only statement is a return of some computed value, and that function doesn't already make a this reference inside it, and there's no self-reference (recursion, event binding/unbinding), and you don't reasonably expect the function to ever be that way, you can probably safely refactor it to be an => arrow function.
+   * If you have an inner function expression that's relying on a var self = this hack or a .bind(this) call on it in the enclosing function to ensure proper this binding, that inner function expression can probably safely become an => arrow function.
+   * If you have an inner function expression that's relying on something like var args = Array.prototype.slice.call(arguments) in the enclosing function to make a lexical copy of arguments, that inner function expression can probably safely become an => arrow function.
+   * For everything else -- normal function declarations, longer multistatement function expressions, functions that need a lexical name identifier self-reference (recursion, etc.), and any other function that doesn't fit the previous characteristics -- you should probably avoid => function syntax.
+
+
+#### Rest and spread operator
+   ```
+   function foo(x,y,z) {
+      console.log( x, y, z );
+   }
+
+   foo( ...[1,2,3] );				// 1 2 3
+   ```
+
+#### Destructuring
+   In `pre-ES6`:  Manually assigning indexed values from an array or properties from an object can be thought of as structured assignment. 
+   ```
+   array assignment:
+   function foo() {
+	   return [1,2,3];
+   }
+   var tmp = foo(),
+      a = tmp[0], b = tmp[1], c = tmp[2];
+   
+
+   object assignment:
+   function bar() {
+      return {
+         x: 4,
+         y: 5,
+         z: 6
+         };
+   }
+   var tmp = bar(),
+	x = tmp.x, y = tmp.y, z = tmp.z;
+   ```
+
+   In `ES6`: ES6 adds a dedicated syntax for destructuring, specifically array destructuring and object destructuring. This syntax eliminates the need for the tmp variable in the previous snippets, making them much cleaner.
+   ```
+   const [ a, b, c ] = foo();
+   const { x, y, z } = bar();
+
+   console.log( a, b, c );				// 1 2 3
+   console.log( x, y, z );				// 4 5 6
+   ```
+
+#### For..of Loops
+   in `pre-ES6`, we can use `forEach` to iterate an array:
+   ```
+   myArray.forEach(function (value) {
+      console.log(value);
+   });
+   ```
+   But the issue is that you can’t break out of this loop using a break statement or return from the enclosing function using a return statement.
+
+   We can also use `for-in` loop to iterate an array:
+   ```
+   for (var index in myArray) {    // don't actually do this
+      console.log(myArray[index]);
+   }
+   ```
+   But the drawbacks are: The values assigned to index in this code are the strings "0", "1", "2" and so on, not actual numbers.
+
+   In `ES6`, we can use `for-of` loop to iterate:
+   ```
+   for (var value of myArray) {
+      console.log(value);
+   }
+   // also work for a string
+   for (var c of "hello") {
+      console.log( c );
+   }
+   // "h" "e" "l" "l" "o"
+   ```
+
+#### Object Literal Extensions
+   Concise Properties:
+   ```
+   var x = 2, y = 3,
+	o = {
+		x,
+		y
+	};
+   ```
+   Concise Methods:
+   ```
+   var o = {
+      x() {
+         // ..
+      },
+      y() {
+         // ..
+      }
+   }
+   ```
+
+#### Template Literals
+   ```
+   var name = "Kyle";
+
+   var greeting = `Hello ${name}!`;
+
+   console.log( greeting );			// "Hello Kyle!"
+   console.log( typeof greeting );		// "string"
+   ```
+
+#### Symbols
+   With ES6, for the first time in quite a while, a new primitive type has been added to JavaScript: the symbol. Unlike the other primitive types, however, symbols don't have a literal form.
+
+   Here's how you create a symbol:
+   ```
+   var sym = Symbol( "some optional description" );
+
+   typeof sym;		// "symbol"
+   ```
+
+   Symbols could be a good replacement for strings or integers as class/module constants:
+   ```
+   class Application {
+      constructor(mode) {
+         switch (mode) {
+            case Application.DEV:
+            // Set up app for development environment
+            break;
+            case Application.PROD:
+            // Set up app for production environment
+            break;
+            case default:
+            throw new Error('Invalid application mode: ' + mode);
+         }
+      }
+   }
+
+   Application.DEV = Symbol('dev');
+   Application.PROD = Symbol('prod');
+
+   // Example use
+   const app = new Application(Application.DEV);
+   ```
+
+
+#### Array.find(), Array.findIndex()
+
    The find() method returns the value of the first array element that passes a `test` function.
 
    This example finds (returns the value of ) the first element that is larger than 18:
@@ -114,18 +280,12 @@ New features in ES6:
    }
    ```
    Note that the function takes 3 arguments: The item value, The item index, The array itself.
-  
-* New global methods
-  
-  NaN: The global NaN property is a value representing Not-A-Number.
 
-  The global isFinite() method returns false if the argument is Infinity or NaN.
-
-   The global isNaN() method returns true if the argument is NaN. Otherwise it returns false.
 
 
 ### Javascript
 * closure
+* shallow clone and deep clone
 * this
 * Hoisting
 * asynchronous
