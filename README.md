@@ -9,67 +9,67 @@ New features in ES6:
 
 #### Block-Scoped Declarations
 
-* let and const
-  
-  [w3c let and const](https://www.w3schools.com/js/js_let.asp)
+let and const
 
-  ES2015 introduced two important new JavaScript keywords: let and const.
+[w3c let and const](https://www.w3schools.com/js/js_let.asp)
 
-   These two keywords provide Block Scope variables (and constants) in JavaScript.
+ES2015 introduced two important new JavaScript keywords: let and const.
 
-   Before ES2015, JavaScript had only two types of scope: Global Scope and Function Scope. 
+These two keywords provide Block Scope variables (and constants) in JavaScript.
 
-  The reason to introduce this two keywords is that `var` has a few issues:
-   1. Variables declared with the var keyword can not have Block Scope.
-      ```
-      { 
-         var x = 2; 
-      }
-      // x CAN be used here
-      ```
-   2. Redeclaring a variable using the var keyword can impose problems.
-      ```
-      var x = 10;
-      // Here x is 10
-      { 
-         var x = 2;
-         // Here x is 2
-      }
+Before ES2015, JavaScript had only two types of scope: Global Scope and Function Scope. 
+
+The reason to introduce this two keywords is that `var` has a few issues:
+1. Variables declared with the var keyword can not have Block Scope.
+   ```
+   { 
+      var x = 2; 
+   }
+   // x CAN be used here
+   ```
+2. Redeclaring a variable using the var keyword can impose problems.
+   ```
+   var x = 10;
+   // Here x is 10
+   { 
+      var x = 2;
       // Here x is 2
-      ```
+   }
+   // Here x is 2
+   ```
 
-      Redeclaring a variable using the let keyword can solve this problem.
+   Redeclaring a variable using the let keyword can solve this problem.
 
-      Redeclaring a variable inside a block will not redeclare the variable outside the block:
-      ```
-      var x = 10;
-      // Here x is 10
-      { 
-         let x = 2;
-         // Here x is 2
-      }
-      // Here x is 10
-      ```
+   Redeclaring a variable inside a block will not redeclare the variable outside the block:
+   ```
+   var x = 10;
+   // Here x is 10
+   { 
+      let x = 2;
+      // Here x is 2
+   }
+   // Here x is 10
+   ```
 
-   3. Variables defined with var are hoisted to the top, means you can use a variable before it is declared:
-      ```
-      // you CAN use carName here
-      var carName;
-      ```
-      ```
-      // you can NOT use carName here
-      let carName;
-      ```
+3. Variables defined with var are hoisted to the top, means you can use a variable before it is declared:
+   ```
+   // you CAN use carName here
+   var carName;
+   ```
+   ```
+   // you can NOT use carName here
+   let carName;
+   ```
 
-      let and const can solve the issues. const is read-only after its initial value is set.
-      this works:
-      ```
-      const a = {};
-      a.foo = foo;
-      const b = [];
-      b.push(1);
-      ```
-   
+   let and const can solve the issues. const is read-only after its initial value is set.
+   this works:
+   ```
+   const a = {};
+   a.foo = foo;
+   const b = [];
+   b.push(1);
+   ```
+
 
 #### Default parameter values
 
@@ -268,6 +268,75 @@ New features in ES6:
    ```
 
 
+
+#### Iterator and Generators
+A generator can pause itself in mid-execution, and can be resumed either right away or at a later time.
+??
+```
+function *foo() {
+	// ..
+   yield 10;
+}
+const it = foo();
+it.next();
+```
+
+#### Modules
+```
+function foo(..) {
+	// ..
+}
+
+export default foo; 
+//  you are exporting a binding to the function expression value at that moment, not to the identifier foo. 
+//If you later assign foo to a different value inside your module, the module import still reveals the function originally exported, not the new value.
+
+export { foo as default }; 
+// In this version of the module export, the default export binding is actually to the foo identifier rather than its value, 
+// so you get the previously described binding behavior (i.e., if you later change foo's value, the value seen on the import side will also be updated).
+```
+```
+import foo from "foo";
+
+// or:
+import { default as foo } from "foo";
+```
+
+#### Classes
+At the heart of the new ES6 class mechanism is the class keyword, which identifies a block where the contents define the members of a function's prototype. Consider:
+```
+class Foo {
+	constructor(a,b) {
+		this.x = a;
+		this.y = b;
+	}
+
+	gimmeXY() {
+		return this.x * this.y;
+	}
+}
+```
+```
+class Bar extends Foo {
+	constructor(a,b,c) {
+		super( a, b );
+		this.z = c;
+	}
+
+	gimmeXYZ() {
+		return super.gimmeXY() * this.z;
+	}
+}
+
+var b = new Bar( 5, 15, 25 );
+
+b.x;						// 5
+b.y;						// 15
+b.z;						// 25
+b.gimmeXYZ();				// 1875
+```
+A significant new addition is super, which is actually something not directly possible pre-ES6 (without some unfortunate hack trade-offs). In the constructor, super automatically refers to the "parent constructor," which in the previous example is Foo(..). In a method, it refers to the "parent object," such that you can then make a property/method access off it, such as super.gimmeXY().
+
 #### Array.find(), Array.findIndex()
 
    The find() method returns the value of the first array element that passes a `test` function.
@@ -355,6 +424,7 @@ New features in ES6:
    * 
 
 
+* map and forEach
 * closure
   https://medium.com/dailyjs/i-never-understood-javascript-closures-9663703368e8
 * shallow clone and deep clone
@@ -379,11 +449,19 @@ New features in ES6:
 
 ## Testing tool, test driven
 
+## Dev tools
+* React/redux dev tools
+
+## Third-party library
+* [Async]()
+* [Moment.js]()
+
 ## SCSS, SASS, Webpack, env build, Git, CI/CD, AWS, Docker
 
 ## Agile experience
 
 ## Open source community exposure, open source freamwork code
+* [HyperLedger Caliper](https://github.com/hyperledger/caliper)
 
 ## Algorithm
 
