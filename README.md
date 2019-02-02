@@ -98,7 +98,7 @@ New features in ES6:
 
    Using const is safer than using var, because a function expression is always constant value.
 
-   `this`:
+   `this`: in arrow function, `this` is not change.
    ```
    var controller = {
 	makeRequest: function(..){
@@ -121,6 +121,8 @@ New features in ES6:
       }
    };
    ```
+
+
    arrow functions is not a method for saving keystrokes, it is not appropriate for every situations:
    So now we can conclude a more nuanced set of rules for when => is appropriate and not:
 
@@ -284,7 +286,77 @@ New features in ES6:
 
 
 ### Javascript
+
+#### Introduction
+* ECMAScript: a specification standardized by Ecma international. It was created to standardize Javascript.
+
+* Javascript Engine: Today, JavaScript can execute not only in the browser, but also on the server, or actually on any device that has a special program called the JavaScript engine. Different browser has different engines: e.g. V8 (Chrome and Opera), SpiderMonkey (Firefox).
+
+* JS restrictions: JavaScript’s abilities in the browser are limited for the sake of the user’s safety. The aim is to prevent an evil webpage from accessing private information or harming the user’s data.
+  * not read/write arbitrary files on the hard disk, copy them or execute programs. It has no direct access to OS system functions.
+
+    Modern browsers allow it to work with files, but the access is limited and only provided if the user does certain actions, like “dropping” a file into a browser window or selecting it via an `input` tag.
+
+    There are ways to interact with camera/microphone and other devices, but they require a user’s explicit permission. So a JavaScript-enabled page may not sneakily enable a web-camera, observe the surroundings and send the information to the NSA.
+
+  * Different tabs/windows generally do not know about each other. Sometimes they do, for example when one window uses JavaScript to open the other one. But even in this case, JavaScript from one page may not access the other if they come from different sites (from a different domain, protocol or port).
+
+    This is called the “Same Origin Policy”. To work around that, both pages must contain a special JavaScript code that handles data exchange.
+
+    This limitation is, again, for the user’s safety. A page from http://anysite.com which a user has opened must not be able to access another browser tab with the URL http://gmail.com and steal information from there.
+
+   * JavaScript can easily communicate over the net to the server where the current page came from. But its ability to receive data from other sites/domains is crippled. Though possible, it requires explicit agreement (expressed in HTTP headers) from the remote side. Once again, that’s a safety limitation.
+   * Such limits do not exist if JavaScript is used outside of the browser, for example on a server. Modern browsers also allow plugin/extensions which may ask for extended permissions.
+
+#### Fundamentals
+* The benefit of a separate script file is that the browser will download it and store it in its cache. Other pages that reference the same script will take it from the cache instead of downloading it, so the file is actually downloaded only once. 
+* We recommend putting semicolons between statements even if they are separated by newlines.
+* always use strict:
+   ```
+      "use strict";
+
+      // this code works the modern way
+      ...
+   ```
+* There are 7 basic types in JavaScript.
+  * `number`
+  * `string`
+  * `boolean`
+  * `null`: for unknown values – a standalone type that has a single value null.
+  * `undefined`: or unassigned values – a standalone type that has a single value undefined.
+  * `object`
+  * `symbol`: for unique identifiers. Enabled by ES6.
+  
+   The `typeof` operator allows us to see which type is stored in a variable.
+   * Two forms: `typeof x` or `typeof(x)`.
+   * For null returns `"object"` – this is an error in the language, it’s not actually an object.
+   * The result of `typeof alert` is `"function"`, because `alert` is a function of the language. We’ll study functions in the next chapters where we’ll see that there’s no special “function” type in JavaScript. Functions belong to the object type. But `typeof` treats them differently. Formally, it’s incorrect, but very convenient in practice.
+
+* Addition ‘+’ concatenates strings:
+  Almost all mathematical operations convert values to numbers. A notable exception is addition `+`. If one of the added values is a string, the other one is also converted to a string. Then, it concatenates (joins) them:
+
+   ```
+      alert( 1 + '2' ); // '12' (string to the right)
+      alert( '1' + 2 ); // '12' (string to the left)
+   ```
+
+   This only happens when at least one of the arguments is a string. Otherwise, values are converted to numbers.
+
+* Operators:
+  * String concatenation, binary +:
+      ```
+         let s = "my" + "string";
+         alert(s); // mystring
+      ```
+   * Remainder %: 5 % 2 // 1
+   * Exponentiation **: 
+      2 ** 4 // result is 16. `a` multiplied by itself `b` times
+      4 ** (1/2) // result is 2. power of 1/2 is the same as a square root
+   * 
+
+
 * closure
+  https://medium.com/dailyjs/i-never-understood-javascript-closures-9663703368e8
 * shallow clone and deep clone
 * this
 * Hoisting
@@ -314,6 +386,8 @@ New features in ES6:
 ## Open source community exposure, open source freamwork code
 
 ## Algorithm
+
+## Network protocol
 
 ## Design Pattern
 * Facade Pattern
