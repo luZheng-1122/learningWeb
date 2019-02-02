@@ -90,9 +90,9 @@ The reason to introduce this two keywords is that `var` has a few issues:
 
 
 #### Arrow functions
-  ```
+   ```
   const x = (x, y) => { return x * y };
-  ```
+   ```
 
    Arrow functions are not hoisted. They must be defined before they are used.
 
@@ -370,6 +370,7 @@ A significant new addition is super, which is actually something not directly po
 ## Cross-browser compatibility
 
 ## React, React Native (Mobile H5)
+* Ant design
 
 ## Node.js, MVC, MongoDB, backend integration
 
