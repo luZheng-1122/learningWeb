@@ -9,66 +9,65 @@ New features in ES6:
 
 #### Block-Scoped Declarations
 
-let and const
+   let and const: [w3c let and const](https://www.w3schools.com/js/js_let.asp)
 
-[w3c let and const](https://www.w3schools.com/js/js_let.asp)
+   ES2015 introduced two important new JavaScript keywords: let and const.
 
-ES2015 introduced two important new JavaScript keywords: let and const.
+   These two keywords provide Block Scope variables (and constants) in JavaScript.
 
-These two keywords provide Block Scope variables (and constants) in JavaScript.
+   Before ES2015, JavaScript had only two types of scope: Global Scope and Function Scope. 
 
-Before ES2015, JavaScript had only two types of scope: Global Scope and Function Scope. 
-
-The reason to introduce this two keywords is that `var` has a few issues:
-1. Variables declared with the var keyword can not have Block Scope.
-   ```
-   { 
-      var x = 2; 
-   }
-   // x CAN be used here
-   ```
-2. Redeclaring a variable using the var keyword can impose problems.
-   ```
-   var x = 10;
-   // Here x is 10
-   { 
-      var x = 2;
+   The reason to introduce this two keywords is that `var` has a few issues:
+   1. Variables declared with the var keyword can not have Block Scope.
+      ```
+      { 
+         var x = 2; 
+      }
+      // x CAN be used here
+      ```
+   2. Redeclaring a variable using the var keyword can impose problems.
+      ```
+      var x = 10;
+      // Here x is 10
+      { 
+         var x = 2;
+         // Here x is 2
+      }
       // Here x is 2
-   }
-   // Here x is 2
-   ```
+      ```
 
-   Redeclaring a variable using the let keyword can solve this problem.
+      **Redeclaring a variable using the let keyword can solve this problem.**
+      
+      Redeclaring a variable inside a block will not redeclare the variable outside the block:
+      ```
+      var x = 10;
+      // Here x is 10
+      { 
+         let x = 2;
+         // Here x is 2
+      }
+      // Here x is 10
+      ```
 
-   Redeclaring a variable inside a block will not redeclare the variable outside the block:
-   ```
-   var x = 10;
-   // Here x is 10
-   { 
-      let x = 2;
-      // Here x is 2
-   }
-   // Here x is 10
-   ```
+   3. Variables defined with var are hoisted to the top, means you can use a variable before it is declared:
+      ```
+      // you CAN use carName here
+      var carName;
+      ```
+      ```
+      // you can NOT use carName here
+      let carName;
+      ```
 
-3. Variables defined with var are hoisted to the top, means you can use a variable before it is declared:
-   ```
-   // you CAN use carName here
-   var carName;
-   ```
-   ```
-   // you can NOT use carName here
-   let carName;
-   ```
-
-   let and const can solve the issues. const is read-only after its initial value is set.
-   this works:
-   ```
-   const a = {};
-   a.foo = foo;
-   const b = [];
-   b.push(1);
-   ```
+      **let and const can solve the issues. const is read-only after its initial value is set.**
+      
+      this works:
+      ```
+      const a = {};
+      a.foo = foo;
+      const b = [];
+      b.push(1);
+      ```
 
 
 #### Default parameter values
@@ -91,7 +90,7 @@ The reason to introduce this two keywords is that `var` has a few issues:
 
 #### Arrow functions
    ```
-  const x = (x, y) => { return x * y };
+      const x = (x, y) => { return x * y };
    ```
 
    Arrow functions are not hoisted. They must be defined before they are used.
@@ -124,7 +123,6 @@ The reason to introduce this two keywords is that `var` has a few issues:
 
 
    arrow functions is not a method for saving keystrokes, it is not appropriate for every situations:
-   So now we can conclude a more nuanced set of rules for when => is appropriate and not:
 
    * If you have a short, single-statement inline function expression, where the only statement is a return of some computed value, and that function doesn't already make a this reference inside it, and there's no self-reference (recursion, event binding/unbinding), and you don't reasonably expect the function to ever be that way, you can probably safely refactor it to be an => arrow function.
    * If you have an inner function expression that's relying on a var self = this hack or a .bind(this) call on it in the enclosing function to ensure proper this binding, that inner function expression can probably safely become an => arrow function.
@@ -354,7 +352,7 @@ A significant new addition is super, which is actually something not directly po
 
 
 
-### Javascript
+### Javascript Language
 
 #### Introduction
 * ECMAScript: a specification standardized by Ecma international. It was created to standardize Javascript.
@@ -378,8 +376,11 @@ A significant new addition is super, which is actually something not directly po
    * Such limits do not exist if JavaScript is used outside of the browser, for example on a server. Modern browsers also allow plugin/extensions which may ask for extended permissions.
 
 #### Fundamentals
+
 * The benefit of a separate script file is that the browser will download it and store it in its cache. Other pages that reference the same script will take it from the cache instead of downloading it, so the file is actually downloaded only once. 
+
 * We recommend putting semicolons between statements even if they are separated by newlines.
+
 * always use strict:
    ```
       "use strict";
@@ -387,6 +388,7 @@ A significant new addition is super, which is actually something not directly po
       // this code works the modern way
       ...
    ```
+
 * There are 7 basic types in JavaScript.
   * `number`
   * `string`
@@ -421,10 +423,346 @@ A significant new addition is super, which is actually something not directly po
    * Exponentiation **: 
       2 ** 4 // result is 16. `a` multiplied by itself `b` times
       4 ** (1/2) // result is 2. power of 1/2 is the same as a square root
-   * 
+   * `==` regular equality check has a problem, it cannot differentiate 0 from false:
+      ```
+         alert( 0 == false ); // true, `false` is converted to number `0`
+      ```
+      The same thing happens with an empty string:
+      ```
+         alert( '' == false ); // true, `false` and `''` are both converted to number `0`
+      ```
+      This happens because operands of different types are converted to numbers by the equality operator ==. An empty string, just like false, becomes a zero. 
+
+      **A strict equality operator === checks the equality without type conversion.**
+
+      `==` converts the operands if they are not of the same type, then applies strict comparison. If both operands are objects, then JavaScript compares internal references which are equal when operands refer to the same object in memory:
+      ```
+         var object1 = {'key': 'value'}, object2 = {'key': 'value'}; 
+         object1 == object2 //false, since the internal reference is different
+         object1 === object2 //false
+
+         // Use `Object.is()` to determines whether two values are the same value.
+         Object.is(object1,object2) // false
+         Object.is(object1,object1) // true
+      ```
+
+      **Compare two objects**
+      1. use `_.isEqual()` in [lodash](https://lodash.com/docs#isEqual).
+      2. reinvent the wheel: https://gomakethings.com/check-if-two-arrays-or-objects-are-equal-with-javascript/
 
 
-* map and forEach
+
+* browser-specific functions to interact with visitors: `alert`, `prompt` and `confirm`.
+   
+   The mini-window with the message is called a `modal window`. The word `modal` means that the visitor can’t interact with the rest of the page, press other buttons, etc. until they have dealt with the window.
+
+* logical operators:
+   * `||` OR
+      OR finds the `first truthy` value:
+      ```
+         result = value1 || value2 || value3;
+         
+         // The OR || operator does the following:
+         // 1. Evaluates operands from left to right.
+         // 2. For each operand, converts it to boolean. If the result is true, stops and returns the original value of that operand.
+         // 3. If all operands have been evaluated (i.e. all were false), returns the last operand.
+      ```
+      usage:
+      1. Getting the first truthy value from a list of variables or expressions.
+      ```
+         let currentUser = null;
+         let defaultUser = "John";
+
+         let name = currentUser || defaultUser || "unnamed";
+
+         alert( name ); // selects "John" – the first truthy value
+      ```
+      2. Short-circuit evaluation.
+      ```
+         let x;
+         false || (x = 1);
+         alert(x); // 1
+
+         // in React
+         <dialog title={isFailed || <FormattedMessage id="ADD_SUCCESS" defaultMessage="Added" />} />
+      ```
+   * `&&` AND
+      AND finds the `first falsy` value.
+      ```
+         result = value1 && value2 && value3;
+
+         // The AND && operator does the following:
+         // 1. Evaluates operands from left to right.
+         // 2. For each operand, converts it to a boolean. If the result is false, stops and returns the original value of that operand.
+         // 3. If all operands have been evaluated (i.e. all were truthy), returns the last operand.
+      ```
+      usage:
+      1. Short-circuit evaluation.
+      ```
+         let x = 1;
+         (x > 0) && alert( 'Greater than zero!' );
+
+         // if url exist, href equals to the later variable
+         href = url && `${process.env.REACT_APP_BIGCHAINDB_URL}${url}`
+
+         // if data contains keys and href exist, button equals to the FlatButton.
+         // if any of the two values are false, the button equals to false, meaning not showing on the page
+         button = (Object.keys(data).length && href && <FlatButton />
+      ```
+
+* Loop: 
+   A single execution of the loop body is called an `iteration`.
+   creating an infinite loop:
+   ```
+      for (;;) {
+         // repeats without limits
+      }
+   ```
+   Labels for break/continue:
+   ```
+      outer: for (let i = 0; i < 3; i++) {
+
+      for (let j = 0; j < 3; j++) {
+
+         let input = prompt(`Value at coords (${i},${j})`, '');
+
+         // if an empty string or canceled, then break out of both loops
+         if (!input) break outer; // (*) looks upwards for the label named outer and breaks out of that loop.
+
+         // do something with the value...
+      }
+      }
+      alert('Done!');
+   ```
+
+* switch:
+   Let’s emphasize that the equality check is always strict. The values must be of the same type to match.
+
+* Functions
+   * Parameters
+      ```
+         function showMessage(from, text) { // arguments: from, text
+            alert(from + ': ' + text);
+         }
+
+         showMessage('Ann', 'Hello!'); // Ann: Hello! (*)
+         showMessage('Ann', "What's up?"); // Ann: What's up? (**)
+      ```
+      When the function is called in lines (*) and (**), the given values are copied to local variables from and text. Then the function uses them. When the function changes the from and text, it only changes the local copy value, the change is not seen outside.
+   * Default values:
+      default value can be a string or a more complex expression, which is only evaluated and assigned if the parameter is missing:
+      ```
+         function showMessage(from, text = anotherFunction()) {
+            // anotherFunction() only executed if no text given
+            // its result becomes the value of text
+         }
+         function anotherFunction(){
+            return 'default text';
+         }
+      ```
+   * Naming a function
+      For instance:
+      ```
+         "get…" – return a value,
+         "calc…" – calculate something,
+         "create…" – create something,
+         "check…" – check something and return a boolean, etc.
+      ```
+      **one function, one action**
+   * Function Expression VS Function Declaration
+      1. Function Declaration:
+      ```
+         function sum(a, b) {
+            return a + b;
+         }
+      ```
+      **A Function Declaration is usable in the whole script/code block.**
+      In other words, when JavaScript prepares to run the script or a code block, it first looks for Function Declarations in it and creates the functions. We can think of it as an “initialization stage”.
+
+      And after all of the Function Declarations are processed, the execution goes on.
+
+      As a result, a function declared as a Function Declaration can be called earlier than it is defined.
+      2. Function Expression
+      ```
+         let sum = function(a, b) {
+            return a + b;
+         };
+      ```
+      **A Function Expression is created when the execution reaches it and is usable from then on.**
+
+      When we need to create a function, the first to consider is Function Declaration syntax. But if a Function Declaration does not suit us for some reason (we’ve seen an example above), then Function Expression should be used.
+
+   * Arrow functions
+      Arrow function can simplyfy Function Expression:
+      ```
+         let sum = (a, b) => a + b; // one line function, two argument
+         let double = n => n * 2; // one line function, one argument
+         let sayHi = () => alert("Hello!"); // one line function, zero argument
+      ```
+
+#### Code quality
+
+* Debugger
+   [Debugging in Chrome](https://javascript.info/debugging-chrome)
+
+   Debugger command, we can pause the code by using the `debugger` command:
+   ```
+      function hello(name) {
+         let phrase = `Hello, ${name}!`;
+
+         debugger;  // <-- the debugger stops here
+
+         say(phrase);
+      }
+   ```
+* Coding style
+   1. [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)
+   2. [StandardJS](https://standardjs.com/)
+* Good comments
+   1. Avoid descibing what is does, since the good code should be self-descriptive
+   2. Describe the architecture
+   3. Document a function usage: [JSDoc](https://github.com/jsdoc3/jsdoc)
+   4. Why is the task solved this way?
+   5. Any subtle features of the code? Where they are used?
+* Testing
+   * Behaviour Driven Development(BDD): the spec goes first, followed by implementation. At the end we have both the spec and the code. The spec can be used in three ways:
+
+      1. `Tests` guarantee that the code works correctly.
+      2. `Docs` – the titles of describe and it tell what the function does.
+      3. `Examples` – the tests are actually working examples showing how a function can be used.
+
+   * Testing tools:
+      1. [Mocha](https://mochajs.org/) – the core framework: it provides common testing functions including describe and it and the main function that runs tests.
+      2. [Chai](https://www.chaijs.com/) – the library with many assertions. It allows to use a lot of different assertions, for now we need only assert.equal.
+* Polyfills
+   When we use modern features of the language, some engines may fail to support such code. Here Babel comes to the rescue. Babel is a transpiler. It rewrites modern JavaScript code into the previous standard.
+
+   Actually, there are two parts in Babel:
+   1. the transpiler program, which rewrites the code into the older standard. And then the code is delivered to the website for users. Modern project build system like `webpack` or `brunch` provide means to run transpiler automatically on every code change, so that doesn’t involve any time loss from our side.
+   2. the polyfill. There’s a term “polyfill” for scripts that “fill in” the gap and add missing implementations. 
+      ```
+      // Polyfill provided by MDN for Object.is
+      if (!Object.is) {
+         Object.is = function(x, y) {
+            // SameValue algorithm
+            ...
+         };
+      }
+      ```
+
+
+
+#### Object
+* Square brackets notation:
+   ```
+      let user = {
+         name: "John",
+         age: 30
+      };
+
+      let key = prompt("What do you want to know about the user?", "name");
+
+      // access by variable
+      alert( user[key] ); // John (if enter "name")
+
+      // when the key is multiword preperty
+      user["likes birds"] = true;
+
+      // computed properties
+      let fruit = 'apple';
+      let bag = {
+         [fruit + 'Computers']: 5 // bag.appleComputers = 5
+      };
+   ```
+
+* remove a property:
+   ```
+   delete user.age;
+   ```
+
+* Existence check, a special operator `in` to check for the existence of a property.
+   ```
+   let user = { name: "John", age: 30 };
+   alert( "age" in user ); // true, user.age exists
+   alert( "blabla" in user ); // false, user.blabla doesn't exist
+
+   // using a variable as the tested key
+   let user = { age: 30 };
+   let key = "age";
+   alert( key in user ); // true, takes the name from key and checks for such property
+   ```
+* copying an object is copying its reference. 
+   ```
+   let user = { name: 'John' };
+   ```
+   The value of `user` is the reference (address) of the real object. So copying an object is copying its reference. If change any variable will change the object:
+   ```
+   let user = { name: 'John' };
+
+   let admin = user; // copy the reference
+
+   admin.name = 'Pete'; // changed by the "admin" reference
+
+   alert(user.name); // 'Pete', changes are seen from the "user" reference
+   ```
+
+* Duplicate object: 
+   Create an independent copy, a clone
+   1. if all the properties are primitive type: Object.assign()
+   ```
+   let user = { name: "John" };
+
+   let permissions1 = { canView: true };
+   let permissions2 = { canEdit: true };
+
+   // copies all properties from permissions1 and permissions2 into user
+   Object.assign(user, permissions1, permissions2);
+
+   // now user = { name: "John", canView: true, canEdit: true }
+   ```
+   2. if some properties are objects: _.cloneDeep()
+   ```
+   const objects = [{ 'a': 1 }, { 'b': 2 }];
+
+   const deep = _.cloneDeep(objects);
+   console.log(deep[0] === objects[0]);
+   // => false
+   ```
+
+* `==` convert the type if different and compare the value, `===` compare the types and the value, the value for an object variable is a reference. So:
+   ```
+   admin == user // true
+   admin === user // true
+   ```
+   Two independent objects are not equal, even though both are empty:
+   ```
+   let a = {};
+   let b = {}; // two independent objects
+
+   alert( a == b ); // false
+   ```
+
+* Const object: An object declared as const can be changed.
+   ```
+   const user = {
+      name: "John"
+   };
+
+   user.age = 25; // no problem
+
+   user = {
+      name: "Pete" // Error can't reassign user
+   }
+   ```
+   What if we want to make constant object properties? So that user.age = 25 would give an error. [Property flags and descriptors](https://javascript.info/property-descriptors)
+
+* pass an object as a parameter to a function, the local parameter will copy the reference so if the function changes the object, the outer object will change accordingly. Is it a safe manner?
+* how to check empty array?
+
+#### 
+#### 
+* map reduce
+* forEach
 * closure
   https://medium.com/dailyjs/i-never-understood-javascript-closures-9663703368e8
 * shallow clone and deep clone
@@ -434,6 +772,14 @@ A significant new addition is super, which is actually something not directly po
 * promises and await (performance)
 * prototype
 * design pattern
+
+
+
+
+
+
+
+
 
 ## CSS3, Bootstrap, UI Library, Responsive web design
 
@@ -456,6 +802,7 @@ A significant new addition is super, which is actually something not directly po
 ## Third-party library
 * [Async]()
 * [Moment.js]()
+* [Lodash](https://lodash.com)
 
 ## SCSS, SASS, Webpack, env build, Git, CI/CD, AWS, Docker
 
@@ -472,6 +819,7 @@ A significant new addition is super, which is actually something not directly po
 * Facade Pattern
 * 面向对象有三个要素：封装（Encapsulation）、继承（Inheritance）和多态（Polymorphism）
 
+## UML diagram for high-level architecture
 
 ## Interview Oriented
 1. [39 Best Object Oriented JavaScript Interview Questions and Answers](https://www.code-sample.com/2015/04/javascript-interview-questions-answers.html)
