@@ -691,6 +691,7 @@ A significant new addition is super, which is actually something not directly po
    let key = "age";
    alert( key in user ); // true, takes the name from key and checks for such property
    ```
+
 * copying an object is copying its reference. 
    ```
    let user = { name: 'John' };
@@ -756,10 +757,384 @@ A significant new addition is super, which is actually something not directly po
    ```
    What if we want to make constant object properties? So that user.age = 25 would give an error. [Property flags and descriptors](https://javascript.info/property-descriptors)
 
+* `this`: It’s common that an object method needs to access the information stored in the object to do its job. To access the object, a method can use the this keyword.
+  * function defined in an object can use a shorthand method:
+      ```
+      // these objects do the same
+
+      let user = {
+      sayHi: function() {
+         alert("Hello");
+      }
+      };
+
+      // method shorthand looks better, right?
+      let user = {
+      sayHi() { // same as "sayHi: function()"
+         alert("Hello");
+      }
+      };
+      ```
+  * why we need to have `this`.
+      The following code will error
+      ```
+      let user = {
+         name: "John",
+         age: 30,
+
+         sayHi() {
+            alert( user.name ); // leads to an error
+         }
+
+      };
+
+      let admin = user;
+      user = null; // overwrite to make things obvious
+
+      admin.sayHi(); // Whoops! inside sayHi(), the old name is used! error!
+      ```
+      if we use `this` to replace the `user` above:
+      ```
+      let user = {
+         name: "John",
+         age: 30,
+
+         sayHi() {
+            alert(this.name);
+         }
+      };
+
+      user.sayHi(); // John
+      ```
+  * `this` is not bound, the value of `this` is evaluated during the run-time.
+      ```
+      let user = { name: "John" };
+      let admin = { name: "Admin" };
+
+      function sayHi() {
+         alert( this.name );
+      }
+
+      // use the same functions in two objects
+      user.f = sayHi;
+      admin.f = sayHi;
+
+      // these calls have different this
+      // "this" inside the function is the object "before the dot"
+      user.f(); // John  (this == user)
+      admin.f(); // Admin  (this == admin)
+      ``` 
+      * Reference Type: 
+      To make user.hi() calls work, JavaScript uses a trick – the dot '.' returns not a function, but a value of the special Reference Type.
+
+      The value of Reference Type is a three-value combination `(base, name, strict)`, where:
+         * `base` is the object.
+         * `name` is the property.
+         * `strict` is true if use strict is in effect.
+      The result of a property access user.hi is not a function, but a value of Reference Type. For user.hi in strict mode it is: 
+      ```
+      // Reference Type value
+      (user, "hi", true)
+      ```
+      When parentheses () are called on the Reference Type, they receive the full information about the object and its method, and can set the right `this` (=user in this case).
+
+      Any other operation like assignment `hi = user.hi` discards the reference type as a whole, takes the value of `user.hi` (a function) and passes it on. So any further operation “loses” `this`:
+      ```
+      // split getting and calling the method in two lines
+      let hi = user.hi;
+      hi(); // Error, because this is undefined
+      ```
+      So, as the result, the value of `this` is only passed the right way if the function is called directly using a dot `obj.method()` or square brackets `obj['method']()` syntax (they do the same here). Later in this tutorial, we will learn various ways to solve this problem such as `func.bind()`.
+      * Arrow functions have no `this`
+      Arrow functions are special: they don’t have their “own” this. If we reference this from such a function, it’s taken from the outer “normal” function.
+      * Chaining: to make functions chainable
+      ```
+      let ladder = {
+         step: 0,
+         up() {
+            this.step++;
+            return this;
+         },
+         down() {
+            this.step--;
+            return this;
+         },
+         showStep() {
+            alert( this.step );
+            return this;
+         }
+      }
+
+      ladder.up().up().down().up().down().showStep(); // 1
+      ```
+  * Constructor, operator "new"
+      Constructor functions technically are regular functions. 
+      ```
+      function User(name) {
+         this.name = name;
+         this.isAdmin = false;
+      }
+
+      let user = new User("Jack");
+
+      alert(user.name); // Jack
+      alert(user.isAdmin); // false
+      ```
+
 * pass an object as a parameter to a function, the local parameter will copy the reference so if the function changes the object, the outer object will change accordingly. Is it a safe manner?
 * how to check empty array?
 
-#### 
+#### Data Type
+* Methods of primitives: primitives can provide methods, but they still remain lightweight.
+   ```
+   let str = "Hello";
+   alert( str.toUpperCase() ); // HELLO
+   ```
+   in the above example, when call a function of the primitive `string`, a special “object wrapper” is created that provides the extra functionality, and then is destroyed.
+   **null/undefined have no methods**
+   **primitive cannot store data**
+* Number
+  * `e` to write a number:
+      ```
+      let billion = 1000000000;
+      let billion = 1e9;  // 1 billion, literally: 1 and 9 zeroes
+
+      let ms = 0.000001;
+      let ms = 1e-6; // six zeroes to the left from 1
+      ```
+  * toString(base): The base can vary from 2 to 36. By default it’s 10.
+  * parseInt and parseFloat: They “read” a number from a string until they can’t. In case of an error, the gathered number is returned. if the first character is not a number, then return `NaN`
+      ```
+      alert( parseInt('100.5px') ); // 100
+      alert( parseFloat('12.5em') ); // 12.5
+      ```
+  * [Math](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math)
+
+* String
+  * Accessing characters
+      ```
+      let str = `Hello`;
+      // the first character
+      alert( str[0] ); // H, modern way
+      alert( str.charAt(0) ); // H, historical use
+
+      // can also iterate over characters
+      for (let char of "Hello") {
+         alert(char); // H,e,l,l,o (char becomes "H", then "e", then "l" etc)
+      }
+      ```
+  * searching for a substring
+      `str.indexOf`: 
+      ```
+      let str = 'Widget with id';
+
+      alert( str.indexOf('Widget') ); // 0, because 'Widget' is found at the beginning
+      alert( str.indexOf('widget') ); // -1, not found, the search is case-sensitive
+
+      alert( str.indexOf("id") ); // 1, "id" is found at the position 1 (..idget with id)
+      ```
+      `includes, startsWith, endsWith`
+      ```
+      alert( "Widget with id".includes("Widget") ); // true
+      alert( "Hello".includes("Bye") ); // false
+
+      alert( "Widget".startsWith("Wid") ); // true, "Widget" starts with "Wid"
+      alert( "Widget".endsWith("get") );   // true, "Widget" ends with "get"
+      ```
+  * Getting a substring
+      `substring, substr and slice.`
+      The author finds themself using `slice` almost all the time.
+
+* Array
+  * Methods that work with the end of the array:
+      ```
+      let fruits = ["Apple", "Orange", "Pear"];
+      alert( fruits.pop() ); // remove "Pear" and alert it
+      // Apple, Orange
+
+      fruits.push("Pear");
+      // Apple, Orange, Pear
+      ```
+  * Methods that work with the beginning of the array:
+      ```
+      alert( fruits.shift() ); // remove Apple and alert it
+      // Orange, Pear
+
+      fruits.unshift('Apple');
+      // Apple, Orange, Pear
+      ```
+  * loop:
+      ```
+      let fruits = ["Apple", "Orange", "Plum"];
+
+      // iterates over array elements
+      for (let fruit of fruits) {
+         alert( fruit );
+      }
+      ```
+  * the simplest way to clear the array is: arr.length = 0;.
+  * array methods:
+    * `splice`: The `arr.splice(str)` method is a swiss army knife for arrays. It can do everything: add, remove and insert elements. `arr.splice(index[, deleteCount, elem1, ..., elemN])`. Negative indexes allowed: 
+      ```
+      let arr = [1, 2, 5];
+
+      // from index -1 (one step from the end)
+      // delete 0 elements,
+      // then insert 3 and 4
+      arr.splice(-1, 0, 3, 4);
+
+      alert( arr ); // 1,2,3,4,5
+      ```
+    * `slice`: It returns a new array containing all items from index "start" to "end" (not including "end"). Both start and end can be negative, in that case position from array end is assumed. `arr.slice(start, end)`
+    * `concat`:  joins the array with other arrays and/or items. `arr.concat(arg1, arg2...)`
+    * `forEach`: allows to run a function for every element of the array.
+      ```
+      ["Bilbo", "Gandalf", "Nazgul"].forEach((item, index, array) => {
+         alert(`${item} is at index ${index} in ${array}`);
+      });
+      ```
+    * `indexOf` and `include`
+    * `find` and `findIndex`: find `an element` with the specific condition.
+      ```
+      let users = [
+         {id: 1, name: "John"},
+         {id: 2, name: "Pete"},
+         {id: 3, name: "Mary"}
+      ];
+
+      let user = users.find(item => item.id == 1);
+      // if true is returned, item is returned and iteration is stopped, so only find the first one which is true
+      // for falsy returns undefiend
+      alert(user.name); // John
+      ``` 
+    * `filter`: The `find` method looks for a single (first) element that makes the function return true. If there may be many, we can use `arr.filter(fn)`.
+      ```
+      let users = [
+         {id: 1, name: "John"},
+         {id: 2, name: "Pete"},
+         {id: 3, name: "Mary"}
+      ];
+
+      // returns array of the first two users
+      let someUsers = users.filter(item => item.id < 3);
+
+      alert(someUsers.length); // 2
+      ``` 
+
+      **Transform an array:**
+    * `map`: use it when you want to transform the elements in old array to new elements and return with a new array:
+      ```
+      var array1 = [1, 4, 9, 16];
+
+      // pass a function to map
+      const map1 = array1.map(x => x * 2);
+
+      console.log(map1);
+      // expected output: Array [2, 8, 18, 32]
+      ``` 
+    * `arr.sort(fn)`: we can compare any type of element in the `arr`, all we need is implement the `fn` as the ordering function that knows how to compare the elements. The default is a **string order**.
+    * `split`: split the string into an array by the given delimiter.
+      ```
+      let names = 'Bilbo, Gandalf, Nazgul';
+      let arr = names.split(', ');
+      for (let name of arr) {
+         alert( `A message to ${name}.` ); // A message to Bilbo  (and other names)
+      }
+      ``` 
+    * `join`: does the reverse to `split`. creates a string of `arr` items glued by `separator` between them.
+    * `reduce/reduceRight`: 
+      When we need to iterate over an array – we can use `forEach, for or for..of`.
+
+      When we need to iterate and return the data for each element – we can use `map`.
+
+      The methods `arr.reduce` and `arr.reduceRight` also belong to that breed, but are a little bit more intricate. They are used to calculate a single value based on the array. 
+      ```
+      let arr = [1, 2, 3, 4, 5];
+
+      let result = arr.reduce((sum, current) => sum + current, 0); // 0 is initial value, always indicate the intitial value for safety
+
+      alert(result); // 15
+      ```
+  * Iterables: to make an uniterable object iterable, implement `iterator` function to this object.
+    * Iterables and array-likes:
+      * Iterables are objects that implement the Symbol.iterator method, as described above.
+      * Array-likes are objects that have indexes and length, so they look like arrays.
+    * Array.from:
+      ```
+      let arrayLike = {
+         0: "Hello",
+         1: "World",
+         length: 2
+      };
+
+      let arr = Array.from(arrayLike); // (*)
+      alert(arr.pop()); // World (method works)
+      ``` 
+* Map, Set, weakMap and weakSet:
+    
+  * Map – is a collection of keyed values
+    The differences from a regular Object:
+       * Any keys, objects can be keys.
+       * Iterates in the insertion order.
+       * Additional convenient methods, the size property.
+
+  * Set – is a collection of unique values.
+       * Unlike an array, does not allow to reorder elements.
+       * Keeps the insertion order.
+ 
+   Collections that allow garbage-collection:
+
+  * WeakMap – a variant of Map that allows only objects as keys and removes them once they become inaccessible by other means.
+    It does not support operations on the structure as a whole: no size, no clear(), no iterations.
+
+  * WeakSet – is a variant of Set that only stores objects and removes them once they become inaccessible by other means.
+    Also does not support size/clear() and iterations.
+
+   WeakMap and WeakSet are used as “secondary” data structures in addition to the “main” object storage. Once the object is removed from the main storage, if it is only found in the WeakMap/WeakSet, it will be cleaned up automatically.
+
+* Object.keys(), Object.values(), Object.entries()
+
+* Destructuring assignment
+  * array destructuring
+  ```
+   let arr = ["Ilya", "Kantor"]
+
+   // destructuring assignment with array
+   let [firstName, surname] = arr;
+
+   // work for any iterables:
+   let [a, b, c] = "abc"; // ["a", "b", "c"]
+   let [one, two, three] = new Set([1, 2, 3]);
+
+   // default values
+   let [name = "Guest", surname = "Anonymous"] = ["Julius"];
+  ```
+  * object destructuring
+  ```
+   let options = {
+      title: "Menu",
+      width: 100,
+      height: 200
+   };
+   // name needs to match, order doesn't matter
+   let {title, width, height} = options;
+
+   // change name and default value:
+   let {width: w = 100, height: h = 200, title} = options;
+  ``` 
+  * smart function parameters
+   ```
+   // we pass object to function
+   let options = {
+      title: "My menu",
+      items: ["Item1", "Item2"]
+   };
+
+   // ...and it immediately expands it to variables
+   function showMenu({title = "Untitled", width = 200, height = 100, items = []}) {}
+   showMenu(options);
+   ``` 
+
 #### 
 * map reduce
 * forEach
