@@ -790,7 +790,7 @@ A significant new addition is super, which is actually something not directly po
 ## React, React Native (Mobile H5)
 * Ant design
 
-## Node.js, MVC, MongoDB, backend integration
+## Node.js, MVC, MongoDB, backend integration, RESTful API/GraphQL
 
 ## Performance, security, internet protocol
 
@@ -819,9 +819,16 @@ A significant new addition is super, which is actually something not directly po
 * Facade Pattern
 * 面向对象有三个要素：封装（Encapsulation）、继承（Inheritance）和多态（Polymorphism）
 
-## UML diagram for high-level architecture
+## Documentation
+### UML diagram for high-level architecture
+https://tallyfy.com/uml-diagram/
+
+## Operating System
+### Linux, Shell, Bash, relation with MacOS
 
 ## Interview Oriented
 1. [39 Best Object Oriented JavaScript Interview Questions and Answers](https://www.code-sample.com/2015/04/javascript-interview-questions-answers.html)
 2. [You Don't Know JS](https://github.com/getify/You-Dont-Know-JS)
 3. [The Modern Javascript Tutorial](https://javascript.info/)
+4. [10 js interview questions](https://link.medium.com/CmvrEkHO3T)
+5. [Tips and Tricks that you may need to know when you work in JavaScript](https://medium.com/@alexmaisiura/tips-and-tricks-that-you-may-need-to-know-when-you-work-in-javascript-q-a-799ce3c4b4d2)
