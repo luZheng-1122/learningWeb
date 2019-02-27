@@ -265,7 +265,30 @@ New features in ES6:
    const app = new Application(Application.DEV);
    ```
 
+In an object, using symbol we can create more than one key:value pair with the same key name. they are hidden from each other.
+```
+let user = { name: "John" };
+let id = Symbol("id");
 
+user[id] = "ID Value";
+
+// Imagine that another script wants to have its own “id” property inside user, for its own purposes. That may be another JavaScript library, so the scripts are completely unaware of each other.
+
+let id = Symbol("id");
+user[id] = "Their id value";
+```
+TODO:
+QA: what is the case of more than one script share with a same object with same name symbol property?
+
+Symbols have two main use cases:
+
+1. “Hidden” object properties. If we want to add a property into an object that “belongs” to another script or a library, we can create a symbol and use it as a property key. A symbolic property does not appear in for..in, so it won’t be occasionally listed. Also it won’t be accessed directly, because another script does not have our symbol, so it will not occasionally intervene into its actions.
+
+So we can “covertly” hide something into objects that we need, but others should not see, using symbolic properties.
+
+2. There are many system symbols used by JavaScript which are accessible as Symbol.*. We can use them to alter some built-in behaviors. For instance, later in the tutorial we’ll use Symbol.iterator for iterables, Symbol.toPrimitive to setup object-to-primitive conversion and so on.
+
+Technically, symbols are not 100% hidden. There is a built-in method Object.getOwnPropertySymbols(obj) that allows us to get all symbols. Also there is a method named Reflect.ownKeys(obj) that returns all keys of an object including symbolic ones. So they are not really hidden. But most libraries, built-in methods and syntax constructs adhere to a common agreement that they are. And the one who explicitly calls the aforementioned methods probably understands well what he’s doing.
 
 #### Iterator and Generators
 A generator can pause itself in mid-execution, and can be resumed either right away or at a later time.
