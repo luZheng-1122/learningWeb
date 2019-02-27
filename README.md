@@ -267,7 +267,30 @@ New features in ES6:
    const app = new Application(Application.DEV);
    ```
 
+In an object, using symbol we can create more than one key:value pair with the same key name. they are hidden from each other.
+```
+let user = { name: "John" };
+let id = Symbol("id");
 
+user[id] = "ID Value";
+
+// Imagine that another script wants to have its own “id” property inside user, for its own purposes. That may be another JavaScript library, so the scripts are completely unaware of each other.
+
+let id = Symbol("id");
+user[id] = "Their id value";
+```
+TODO:
+QA: what is the case of more than one script share with a same object with same name symbol property?
+
+Symbols have two main use cases:
+
+1. “Hidden” object properties. If we want to add a property into an object that “belongs” to another script or a library, we can create a symbol and use it as a property key. A symbolic property does not appear in for..in, so it won’t be occasionally listed. Also it won’t be accessed directly, because another script does not have our symbol, so it will not occasionally intervene into its actions.
+
+So we can “covertly” hide something into objects that we need, but others should not see, using symbolic properties.
+
+2. There are many system symbols used by JavaScript which are accessible as Symbol.*. We can use them to alter some built-in behaviors. For instance, later in the tutorial we’ll use Symbol.iterator for iterables, Symbol.toPrimitive to setup object-to-primitive conversion and so on.
+
+Technically, symbols are not 100% hidden. There is a built-in method Object.getOwnPropertySymbols(obj) that allows us to get all symbols. Also there is a method named Reflect.ownKeys(obj) that returns all keys of an object including symbolic ones. So they are not really hidden. But most libraries, built-in methods and syntax constructs adhere to a common agreement that they are. And the one who explicitly calls the aforementioned methods probably understands well what he’s doing.
 
 #### Iterator and Generators
 A generator can pause itself in mid-execution, and can be resumed either right away or at a later time.
@@ -1272,7 +1295,7 @@ A significant new addition is super, which is actually something not directly po
 ## React, React Native (Mobile H5)
 * Ant design
 
-## Node.js, MVC, MongoDB, backend integration
+## Node.js, MVC, MongoDB, backend integration, RESTful API/GraphQL
 
 ## Performance, security, internet protocol
 
@@ -1301,9 +1324,16 @@ A significant new addition is super, which is actually something not directly po
 * Facade Pattern
 * 面向对象有三个要素：封装（Encapsulation）、继承（Inheritance）和多态（Polymorphism）
 
-## UML diagram for high-level architecture
+## Documentation
+### UML diagram for high-level architecture
+https://tallyfy.com/uml-diagram/
+
+## Operating System
+### Linux, Shell, Bash, relation with MacOS
 
 ## Interview Oriented
 1. [39 Best Object Oriented JavaScript Interview Questions and Answers](https://www.code-sample.com/2015/04/javascript-interview-questions-answers.html)
 2. [You Don't Know JS](https://github.com/getify/You-Dont-Know-JS)
 3. [The Modern Javascript Tutorial](https://javascript.info/)
+4. [10 js interview questions](https://link.medium.com/CmvrEkHO3T)
+5. [Tips and Tricks that you may need to know when you work in JavaScript](https://medium.com/@alexmaisiura/tips-and-tricks-that-you-may-need-to-know-when-you-work-in-javascript-q-a-799ce3c4b4d2)
