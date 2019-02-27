@@ -5,6 +5,8 @@
 ### ECMAScript 6
 ECMAScript 6 is also known as ES6 and ECMAScript 2015. Some people like to call it JavaScript 6.
 
+ECMA compatibility table: https://kangax.github.io/compat-table/es6/
+
 New features in ES6:
 
 #### Block-Scoped Declarations
@@ -1051,7 +1053,7 @@ A significant new addition is super, which is actually something not directly po
       ```
       let arr = [1, 2, 3, 4, 5];
 
-      let result = arr.reduce((sum, current) => sum + current, 0); // 0 is initial value, always indicate the intitial value for safety
+      let result = arr.reduce((accumulator, current) => accumulator + current, 0); // 0 is initial value, always indicate the intitial value for safety
 
       alert(result); // 15
       ```
@@ -1135,6 +1137,111 @@ A significant new addition is super, which is actually something not directly po
    showMenu(options);
    ``` 
 
+
+
+* Date and Time
+  * `UTC`: Coordinated Universal Time
+    `GMT`: Greenwich Mean Time
+    they are equal
+
+   * The number of milliseconds that has passed since the beginning of 1970 is called a **timestamp**.
+
+   `new Date()`: return local time zone.
+   `new Date("2019-02-16")`: it assume the time you input `2019-02-16` is midnight GMT time, then it converts the UTC time to your local time zone and returns.
+   `new Date(2019,1,1,14,30,02,666)`: `new Date(year, month, date, hours, minutes, seconds, ms)`, returns the exact time that you input and assume it is the local time zone: `Fri Feb 01 2019 14:30:02 GMT+1100 (Australian Eastern Daylight Time)`. **Note that month starts from 0(Jan) to 11(Dec).**
+   `localdate.getHours` and `localdate.getUTCHours`.
+   `localdate.getTime`: returns the timestamp for the date.
+   `localdate.getTimezoneOffset`: returns the difference between the local time zone and UTC, in minutes.
+
+   * Autocorrection: The autocorrection is a very handy feature of Date objects. We can set out-of-range values, and it will auto-adjust itself. for example:
+   ```
+      let date = new Date(2013, 0, 32); // 32 Jan 2013 ?!?
+      alert(date); // ...is 1st Feb 2013!
+
+      let date = new Date(2016, 1, 28);
+      date.setDate(date.getDate() + 2);
+
+      alert( date ); // 1 Mar 2016
+   ``` 
+
+   * Date to number:
+   ```
+      let start = new Date(); // start counting
+
+      // do the job
+      for (let i = 0; i < 100000; i++) {
+      let doSomething = i * i * i;
+      }
+
+      let end = new Date(); // done
+
+      alert( `The loop took ${end - start} ms` ); // same as end.getTime() - start.getTime(). But slower than getTime since need type conversion first
+   ``` 
+   * Date.now(): good for measure the time difference, It is semantically equivalent to new Date().getTime(), but it doesn’t create an intermediate Date object. So it’s faster and doesn’t put pressure on garbage collection.
+   ```
+      let start = Date.now(); // milliseconds count from 1 Jan 1970
+
+      // do the job
+      for (let i = 0; i < 100000; i++) {
+      let doSomething = i * i * i;
+      }
+
+      let end = Date.now(); // done
+
+      alert( `The loop took ${end - start} ms` ); // subtract numbers, not dates
+   ``` 
+   * Date.parse(str): The string format should be: `YYYY-MM-DDTHH:mm:ss.sssZ`, where:
+      `T`: a delimiter
+      `Z`: it is optional, denotes the time zone in the format +-hh:mm. A single letter `Z` that would mean UTC+0. `-07:00` means toward 7 more hours, `+07:00` means backward 7 hours.
+
+
+
+* JSON (JavaScript Object Notation): initially was made for JavaScript, but many other languages have libraries to handle it as well.
+   * replacer: 
+   The full syntax of `JSON.stringify` is: JSON.stringify(value[, replacer, space]). replacer is an Array of properties to encode or a mapping function function(key, value).
+
+   1. encode all keys in an array and pass as replacer, so that the JSON.stringify will only return the keys you want.
+   ```
+   let room = {
+      number: 23
+   };
+
+   let meetup = {
+      title: "Conference",
+      participants: [{name: "John"}, {name: "Alice"}],
+      place: room // meetup references room
+   };
+
+   room.occupiedBy = meetup; // room references meetup
+
+   alert( JSON.stringify(meetup, ['title', 'participants', 'place', 'name', 'number']) );
+   /*
+   {
+      "title":"Conference",
+      "participants":[{"name":"John"},{"name":"Alice"}],
+      "place":{"number":23}
+   }
+   */
+   ``` 
+   3. you can also pass a mapping function as replacer to convert any value and stringify/parse the converted new value.
+   ```
+   let schedule = `{
+   "meetups": [
+      {"title":"Conference","date":"2017-11-30T12:00:00.000Z"},
+      {"title":"Birthday","date":"2017-04-18T12:00:00.000Z"}
+   ]
+   }`;
+
+   schedule = JSON.parse(schedule, function(key, value) {
+      if (key == 'date') return new Date(value);
+      return value;
+   });
+
+   alert( schedule.meetups[1].date.getDate() ); // works!
+   ```
+
+ 
+* 
 #### 
 * map reduce
 * forEach
