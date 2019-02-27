@@ -140,13 +140,34 @@ console.log(deep[0] === objects[0]);
 ```
 
 There are many other kinds of objects in JavaScript:
-* Array to store ordered data collections,
-* Date to store the information about the date and time,
-* Error to store the information about an error.
+* `Array` to store ordered data collections,
+* `Date` to store the information about the date and time,
+* `Error` to store the information about an error.
 * …And so on.
 
 
 ## Object to primitive conversion
+
+The object-to-primitive conversion is called automatically by many built-in functions and operators that expect a primitive as a value.
+
+There are 3 types (hints) of it:
+
+1. "string" (for alert and other string conversions)
+2. "number" (for maths)
+3. "default" (few operators)
+ 
+The specification describes explicitly which operator uses which hint. There are very few operators that “don’t know what to expect” and use the "default" hint. Usually for built-in objects "default" hint is handled the same way as "number", so in practice the last two are often merged together.
+
+The conversion algorithm is:
+
+1. Call obj[Symbol.toPrimitive](hint) if the method exists,
+2. Otherwise if hint is "string"
+* try obj.toString() and obj.valueOf(), whatever exists.
+3. Otherwise if hint is "number" or "default"
+* try obj.valueOf() and obj.toString(), whatever exists.
+
+In practice, it’s often enough to implement only obj.toString() as a “catch-all” method for all conversions that return a “human-readable” representation of an object, for logging or debugging purposes.
+
 
 ## Constructor, operator "new"
 ### Constructor function
@@ -200,3 +221,51 @@ function User(name) {
 ```
 
 ## Property flags and descriptors
+Object properties, besides a value, have three special attributes (so-called “flags”):
+
+* writable – if true, can be changed, otherwise it’s read-only.
+* enumerable – if true, then listed in loops, otherwise not listed.
+* configurable – if true, the property can be deleted and these attributes can be modified, otherwise not.
+
+two functions:
+* Object.getOwnPropertyDescriptor(obj, propertyName)
+* Object.defineProperty(obj, propertyName, descriptor)
+
+copy all properties:
+```
+let clone = Object.defineProperties({}, Object.getOwnPropertyDescriptors(user));
+```
+
+## Property getters and setters
+
+There are two kinds of properties. The first kind is data properties. 
+
+The second type of properties is something new. It’s accessor properties. They are essentially functions that work on getting and setting a value, but look like regular properties to an external code.
+
+```
+let user = {
+  name: "John",
+  surname: "Smith",
+
+  get fullName() {
+    return `${this.name} ${this.surname}`;
+  },
+
+  set fullName(value) {
+    [this.name, this.surname] = value.split(" ");
+  }
+};
+
+// set fullName is executed with the given value.
+user.fullName = "Alice Cooper";
+
+alert(user.name); // Alice
+alert(user.surname); // Cooper
+```
+
+## Prototypal inheritance
+* In JavaScript, all objects have a `hidden [[Prototype]] property` that’s either another object or null.
+* We can use obj.__proto__ to access it (there are other ways too, to be covered soon). That’s a getter/setter for [[Prototype]].
+* The object referenced by [[Prototype]] is called a “prototype”.
+* If we want to read a property of obj or call a method, and it doesn’t exist, then JavaScript tries to find it in the prototype. `Write/delete` operations work directly on the object, they don’t use the prototype (unless the property is actually a setter).
+* If we call obj.method(), and the method is taken from the prototype, this still references obj. So methods always work with the current object even if they are inherited.

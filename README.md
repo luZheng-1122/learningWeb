@@ -1330,6 +1330,7 @@ https://tallyfy.com/uml-diagram/
 
 ## Operating System
 ### Linux, Shell, Bash, relation with MacOS
+### CPU, storage, network
 
 ## Interview Oriented
 1. [39 Best Object Oriented JavaScript Interview Questions and Answers](https://www.code-sample.com/2015/04/javascript-interview-questions-answers.html)
