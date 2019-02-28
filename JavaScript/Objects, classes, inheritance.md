@@ -155,7 +155,7 @@ There are 3 types (hints) of it:
 1. "string" (for alert and other string conversions)
 2. "number" (for maths)
 3. "default" (few operators)
- 
+
 The specification describes explicitly which operator uses which hint. There are very few operators that “don’t know what to expect” and use the "default" hint. Usually for built-in objects "default" hint is handled the same way as "number", so in practice the last two are often merged together.
 
 The conversion algorithm is:
@@ -269,3 +269,47 @@ alert(user.surname); // Cooper
 * The object referenced by [[Prototype]] is called a “prototype”.
 * If we want to read a property of obj or call a method, and it doesn’t exist, then JavaScript tries to find it in the prototype. `Write/delete` operations work directly on the object, they don’t use the prototype (unless the property is actually a setter).
 * If we call obj.method(), and the method is taken from the prototype, this still references obj. So methods always work with the current object even if they are inherited.
+
+## F.prototype
+When you want to create an object with a constructor function, you can use constructor function's `prototype` property. After giving an object to this property of a constructor function, every time you create an object with this function, the created object will automatically inheritance from the object that stores in constructor function's `prototype`.
+```
+let animal = {
+   eats: true
+};
+
+function Rabbit(name) {
+   this.name = name;
+}
+
+Rabbit.prototype = animal;
+let rabbit = new Rabbit("White Rabbit"); //  rabbit.__proto__ == animal
+alert( rabbit.eats ); // true
+```
+
+On regular objects the prototype is nothing special:
+```
+let user = {
+   name: "John",
+   prototype: "Bla-bla" // no magic at all
+};
+```
+
+By default all functions have F.prototype = { constructor: F }, so we can get the constructor of an object by accessing its "constructor" property.
+
+## Native prototype
+`obj = new Object()`, where `Object` is a built-in object constructor function, and there is a built-in `Object.prototype` which stores many built-in methods, such as toString(). So every created obj will has `obj.__proto__ == Object.prototype` and can use these built-in functions.
+
+* All built-in objects follow the same pattern:
+   * The methods are stored in the prototype (Array.prototype, Object.prototype, Date.prototype etc).
+   * The object itself stores only the data (array items, object properties, the date).
+* Primitives also store methods in prototypes of wrapper objects: Number.prototype, String.prototype, Boolean.prototype. There are no wrapper objects only for undefined and null.
+* Built-in prototypes can be modified or populated with new methods. But it’s not recommended to change them. Probably the only allowable cause is when we add-in a new standard, but not yet supported by the engine JavaScript method.
+
+## Methods for prototypes
+
+The __proto__ is not a property of an object, but an accessor property of Object.prototype. So, if obj.__proto__ is read or assigned, the corresponding getter/setter is called from its prototype, and it gets/sets [[Prototype]]. As it was said in the beginning: __proto__ is a way to access [[Prototype]], it is not [[Prototype]] itself.
+
+* Object.create(proto[, descriptors]) – creates an empty object with given proto as [[Prototype]] (can be null) and optional property descriptors.
+* obj.hasOwnProperty(key): it returns true if obj has its own (not inherited) property named key.
+
+## Class patterns
