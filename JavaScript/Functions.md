@@ -1,5 +1,92 @@
 # Advanced working with functions
 
+## Fundamentals
+### Parameters
+```
+function showMessage(from, text) { // arguments: from, text
+  alert(from + ': ' + text);
+}
+
+showMessage('Ann', 'Hello!'); // Ann: Hello! (*)
+showMessage('Ann', "What's up?"); // Ann: What's up? (**)
+```
+When the function is called in lines (*) and (**), the given values are copied to local variables from and text. Then the function uses them. When the function changes the from and text, it only changes the local copy value, the change is not seen outside.
+
+But when the parameters are object, it only copy the reference. If function changes the object, the outer object will be affected.
+
+### Default values:
+default value can be a string or a more complex expression, which is only evaluated and assigned if the parameter is missing:
+```
+function showMessage(from, text = anotherFunction()) {
+  // anotherFunction() only executed if no text given
+  // its result becomes the value of text
+}
+function anotherFunction(){
+  return 'default text';
+}
+```
+### Return
+A function with an empty return or without it returns `undefined`
+
+### Naming a function
+For instance:
+```
+    "get…" – return a value,
+    "calc…" – calculate something,
+    "create…" – create something,
+    "check…" – check something and return a boolean, etc.
+```
+**one function, one action**
+
+### Function Expression VS Function Declaration
+1. Function Declaration:
+```
+function sum(a, b) {
+  return a + b;
+}
+```
+**A Function Declaration is usable in the whole script/code block.**
+In other words, when JavaScript prepares to run the script or a code block, it first looks for Function Declarations in it and creates the functions. We can think of it as an “initialization stage”.
+
+And after all of the Function Declarations are processed, the execution goes on.
+
+As a result, a function declared as a Function Declaration can be called earlier than it is defined.
+
+2. Function Expression
+```
+let sum = function(a, b) {
+  return a + b;
+};
+```
+**A Function Expression is created when the execution reaches it and is usable from then on.**
+
+When we need to create a function, the first to consider is Function Declaration syntax. But if a Function Declaration does not suit us for some reason below, then Function Expression should be used.
+
+function declared in a code block can only accessed in that block. If you want to define or change a function inside a code block and call it outside the block, you need to use the function expression:
+```
+let age = prompt("What is your age?", 18);
+let welcome;
+
+if (age < 18) {
+  welcome = function() {
+    alert("Hello!");
+  };
+} else {
+  welcome = function() {
+    alert("Greetings!");
+  };
+}
+welcome(); // ok now
+```
+
+### Arrow functions
+Arrow function can simplyfy Function Expression:
+```
+    let sum = (a, b) => a + b; // one line function, two argument
+    let double = n => n * 2; // one line function, one argument
+    let sayHi = () => alert("Hello!"); // one line function, zero argument
+```
+
 ## Recursion and stack 递归
 when a function calls itself. That’s called recursion.
 

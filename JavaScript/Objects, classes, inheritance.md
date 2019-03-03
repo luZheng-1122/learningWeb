@@ -313,3 +313,123 @@ The __proto__ is not a property of an object, but an accessor property of Object
 * obj.hasOwnProperty(key): it returns true if obj has its own (not inherited) property named key.
 
 ## Class patterns
+The term “class” comes from the object-oriented programming. In JavaScript it usually means the `functional class pattern` or `the prototypal pattern`. `The prototypal pattern` is more powerful and memory-efficient, so it’s recommended to stick to it.
+
+prototyple pattern:
+```
+// Same Animal as before
+function Animal(name) {
+  this.name = name;
+}
+
+// All animals can eat, right?
+Animal.prototype.eat = function() {
+  alert(`${this.name} eats.`);
+};
+
+// Same Rabbit as before
+function Rabbit(name) {
+  this.name = name;
+}
+
+Rabbit.prototype.jump = function() {
+  alert(`${this.name} jumps!`);
+};
+
+// setup the inheritance chain
+Rabbit.prototype.__proto__ = Animal.prototype; // (*)
+
+let rabbit = new Rabbit("White Rabbit");
+rabbit.eat(); // rabbits can eat too
+rabbit.jump();
+```
+
+**`Rabbit.prototype` is a normal object, setup its inheritance should use `__proto__`**
+
+## Class syntax
+The basic class syntax:
+```
+class MyClass {
+  constructor(...) {
+    // ...
+  }
+  method1(...) {}
+  method2(...) {}
+  get something(...) {}
+  set something(...) {}
+  static staticMethod(..) {}
+  // ...
+}
+```
+### default constructor
+The value of `MyClass` is a function provided as constructor. If there’s no constructor, then an empty function.
+
+### static function
+In any case, methods listed in the class declaration become members of its `prototype`, with the exception of `static methods` that are written into the function itself and callable as `MyClass.staticMethod()`. Static methods are used when we need a function bound to a class, but not to any object of that class.
+
+Static function will not be added to MyClass.prototype. Meaning that the static function cannot be inheritanced by any instance created by this class. Only the class itself can use this static function.
+
+## Class inheritance, super
+### super
+
+* super.method(...) to call a parent method.
+* super(...) to call a parent constructor (inside our constructor only).
+
+```
+let animal = {
+  name: "Animal",
+  eat() {         // [[HomeObject]] == animal
+    alert(`${this.name} eats.`);
+  }
+};
+
+let rabbit = {
+  __proto__: animal,
+  name: "Rabbit",
+  eat() {         // [[HomeObject]] == rabbit
+    super.eat();
+  }
+};
+
+let longEar = {
+  __proto__: rabbit,
+  name: "Long Ear",
+  eat() {         // [[HomeObject]] == longEar
+    super.eat();
+  }
+};
+
+longEar.eat();  // Long Ear eats.
+```
+**`super` represent the [[HomeObject]].__proto__**
+
+**`this` only represent the object before dot**
+
+### Static methods and inheritance
+```
+Class Deer extends Animal{}
+```
+does two things:
+1. Deer.__proto__ = Animal
+2. Deer.prototype.__proto__ = Animal.prototype
+
+So static function of Animal can be inheritanced by Deer.
+
+## Class instanceof
+The `instanceof` operator allows to check whether an object belongs to a certain class. It also takes inheritance into account.
+
+|             | work for                                                      | returns    |
+| ----------- | ------------------------------------------------------------- | ---------- |
+| typeof      | primitives                                                    | string     |
+| {}.toString | primitives, built-in objects, objects with Symbol.toStringTag | string     |
+| instanceof  | objects                                                       | true/false |
+
+
+## Mixins
+a `mixin` is a class that contains methods for use by other classes without having to be the parent class of those other classes.
+
+Some other languages like e.g. python allow to create mixins using multiple inheritance. JavaScript does not support multiple inheritance, but mixins can be implemented by copying them into the prototype.
+
+We can use mixins as a way to augment a class by multiple behaviors, like event-handling as we have seen above.
+
+Mixins may become a point of conflict if they occasionally overwrite native class methods. So generally one should think well about the naming for a mixin, to minimize such possibility.
