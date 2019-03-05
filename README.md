@@ -27,7 +27,8 @@
 * [Async]()
 * [Moment.js]()
 * [Lodash](https://lodash.com)
-
+* how npm/yarn works
+ 
 ## SCSS, SASS, Webpack, env build, Git, CI/CD, AWS, Docker
 
 ## Agile experience

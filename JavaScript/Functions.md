@@ -31,10 +31,10 @@ A function with an empty return or without it returns `undefined`
 ### Naming a function
 For instance:
 ```
-    "get…" – return a value,
-    "calc…" – calculate something,
-    "create…" – create something,
-    "check…" – check something and return a boolean, etc.
+"get…" – return a value,
+"calc…" – calculate something,
+"create…" – create something,
+"check…" – check something and return a boolean, etc.
 ```
 **one function, one action**
 
@@ -82,9 +82,9 @@ welcome(); // ok now
 ### Arrow functions
 Arrow function can simplyfy Function Expression:
 ```
-    let sum = (a, b) => a + b; // one line function, two argument
-    let double = n => n * 2; // one line function, one argument
-    let sayHi = () => alert("Hello!"); // one line function, zero argument
+let sum = (a, b) => a + b; // one line function, two argument
+let double = n => n * 2; // one line function, one argument
+let sayHi = () => alert("Hello!"); // one line function, zero argument
 ```
 
 ## Recursion and stack 递归
@@ -259,6 +259,15 @@ In ES6, There’s a global Lexical Environment with its Environment Record. And 
    * if the function is called with an object, this === object
 
 ## Function object, NFE
+### name property
+```
+function sayHi() {
+  alert("Hi");
+}
+
+alert(sayHi.name); // sayHi
+```
+
 ### Length property
 ```
 function f1(a) {}
@@ -271,25 +280,7 @@ alert(many.length); // 2
 ```
 
 **polymorphism 多态**
-operate differently based on the length of the argument.
-```
-function ask(question, ...handlers) {
-  let isYes = confirm(question);
-
-  for(let handler of handlers) {
-    if (handler.length == 0) {
-      if (isYes) handler();
-    } else {
-      handler(isYes);
-    }
-  }
-
-}
-
-// for positive answer, both handlers are called
-// for negative answer, only the second one
-ask("Question?", () => alert('You said yes'), result => alert(result));
-```
+treating arguments differently depending on their type or, in our case depending on the length
 
 ### Custom properties
 we can add properties to a function, so we can access to this properties outside the function.
@@ -352,6 +343,11 @@ sayHi(); // Hello, Guest
 // But this won't work:
 func(); // Error, func is not defined (not visible outside of the function)
 ```
+**Sometimes, when we need a reliable internal name, it’s the reason to rewrite a Function Declaration to Named Function Expression form.**
+
+Functions may carry additional properties. Many well-known JavaScript libraries make great use of this feature.
+
+They create a “main” function and attach many other “helper” functions to it. For instance, the jquery library creates a function named $. The lodash library creates a function _. And then adds _.clone, _.keyBy and other properties to (see the docs when you want learn more about them). Actually, they do it to lessen their pollution of the global space, so that a single library gives only one global variable. That reduces the possibility of naming conflicts.
 
 ## The new function syntax
 
@@ -364,6 +360,10 @@ let a = 1, b = 2;
 // outer values are passed as arguments
 alert( sum(a, b) ); // 3
 ```
+
+Usually, a function remembers where it was born in the special property [[Environment]]. It references the Lexical Environment from where it’s created.
+
+But when a function is created using new Function, its [[Environment]] references not the current Lexical Environment, but instead the global one.
 
 ## Scheduling
 
@@ -409,7 +409,7 @@ let timerId = setTimeout(function request() {
 
 ### setTimeout(func, 0)
 
-* Splitting CPU-hungry tasks: when cpu-heavy task, the code will block, which is bad for brower user since they cannot interact during that block time. But using setTimeout(..,0) to recursively run the piece of the small function, in this way, after the break of each small blocked function, the code will excute.
+* Splitting CPU-hungry tasks: when cpu-heavy task, the code will block, which is bad for brower user since they cannot interact during that block time. But using setTimeout(..,0) to recursively run the piece of the smaller function, in this way, after the break of each small blocked function, the code will excute.
 ```
 <div id="progress"></div>
 
@@ -435,6 +435,124 @@ let timerId = setTimeout(function request() {
 ``` 
 
 ## Decorators and forwarding
+
+### decorator
+Transparent caching
+```
+function slow(x) {
+  // there can be a heavy CPU-intensive job here
+  alert(`Called with ${x}`);
+  return x;
+}
+
+function cachingDecorator(func) {
+  let cache = new Map();
+
+  return function(x) {
+    if (cache.has(x)) { // if the result is in the map
+      return cache.get(x); // return it
+    }
+
+    let result = func(x); // otherwise call func
+
+    cache.set(x, result); // and cache (remember) the result
+    return result;
+  };
+}
+
+slow = cachingDecorator(slow);
+
+alert( slow(1) ); // slow(1) is cached
+alert( "Again: " + slow(1) ); // the same
+
+alert( slow(2) ); // slow(2) is cached
+alert( "Again: " + slow(2) ); // the same as the previous line
+```
+
+In the code above `cachingDecorator` is a decorator: a special function that takes another function and alters its behavior.
+
+The idea is that we can call `cachingDecorator` for any function, and it will return the caching wrapper. That’s great, because we can have many functions that could use such a feature, and all we need to do is to apply cachingDecorator to them.
+
+### Using “func.call” for the context
+When the orginal method uses `this`, then after the decorator passes the call the original method, the acutal call will lead to `this` undefined.
+
+There’s a special built-in function method `func.call(context, …args)` that allows to call a function explicitly setting `this`.
+
+```
+let worker = {
+  someMethod() {
+    return 1;
+  },
+
+  slow(x) {
+    alert("Called with " + x);
+    return x * this.someMethod(); // (*)
+  }
+};
+
+function cachingDecorator(func) {
+  let cache = new Map();
+  return function(x) {
+    if (cache.has(x)) {
+      return cache.get(x);
+    }
+    let result = func.call(this, x); // "this" is passed correctly now
+    cache.set(x, result);
+    return result;
+  };
+}
+
+worker.slow = cachingDecorator(worker.slow); // now make it caching
+
+alert( worker.slow(2) ); // works
+alert( worker.slow(2) ); // works, doesn't call the original (cached)
+```
+
+### func.apply
+
+```
+let args = [1, 2, 3];
+
+func.call(context, ...args); // pass an array as list with spread operator
+func.apply(context, args);   // is same as using apply
+```
+If we look more closely, there’s a minor difference between such uses of call and apply.
+* The spread operator ... allows to pass iterable args as the list to call.
+* The apply accepts only array-like args.
+
+And we know that there is an array-like property called `arguments`, so we can make a function wrapper that forwards call to another function with both context and argument:
+```
+let worker = {
+  slow(min, max) {
+    alert(`Called with ${min},${max}`);
+    return min + max;
+  }
+};
+
+function cachingDecorator(func, hash) {
+  let cache = new Map();
+  return function() {
+    let key = hash(arguments); // (*)
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+
+    let result = func.apply(this, arguments); // (**)
+
+    cache.set(key, result);
+    return result;
+  };
+}
+
+function hash(args) {
+  return args[0] + ',' + args[1];
+}
+
+worker.slow = cachingDecorator(worker.slow, hash);
+
+alert( worker.slow(3, 5) ); // works
+alert( "Again " + worker.slow(3, 5) ); // same (cached)
+```
 
 ## Function binding
 
