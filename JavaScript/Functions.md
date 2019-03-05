@@ -555,6 +555,48 @@ alert( "Again " + worker.slow(3, 5) ); // same (cached)
 ```
 
 ## Function binding
+### losing this
+Once a method is passed somewhere separately from the object – this is lost. Here’s how it may happen with setTimeout:
+```
+let user = {
+  firstName: "John",
+  sayHi() {
+    alert(`Hello, ${this.firstName}!`);
+  }
+};
+
+setTimeout(user.sayHi, 1000); // Hello, undefined!
+```
+* Solution 1: a wrapper
+```
+let user = {
+  firstName: "John",
+  sayHi() {
+    alert(`Hello, ${this.firstName}!`);
+  }
+};
+
+setTimeout(function() {
+  user.sayHi(); // Hello, John!
+}, 1000);
+``` 
+But if user changes before the call, the function won't work as expected.
+* Solution 2: bind
+```
+let user = {
+  firstName: "John",
+  sayHi() {
+    alert(`Hello, ${this.firstName}!`);
+  }
+};
+
+let sayHi = user.sayHi.bind(user); // (*)
+
+sayHi(); // Hello, John!
+
+setTimeout(sayHi, 1000); // Hello, John!
+``` 
+If you change user after binding, it will not affect the binded one, `sayHi()` will always called with the fixed context `user` that you bind.
 
 ## Currying and partials
 
