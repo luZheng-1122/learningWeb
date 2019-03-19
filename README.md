@@ -63,17 +63,3 @@ file system
 3. [The Modern Javascript Tutorial](https://javascript.info/)
 4. [10 js interview questions](https://link.medium.com/CmvrEkHO3T)
 5. [Tips and Tricks that you may need to know when you work in JavaScript](https://medium.com/@alexmaisiura/tips-and-tricks-that-you-may-need-to-know-when-you-work-in-javascript-q-a-799ce3c4b4d2)
-
-## Practice
-1. 判断multiple level object中的某个key是否存在
-2. error handler tool
-3. module import/export
-4. setTimeout refactor
-5. arrow function refactor
-6. promise refactor 
-   * when to use callback
-   * when to use promise
-   * when to use .then
-   * when to use async/await
-7. this 的用法
-8. prototype inheritance
