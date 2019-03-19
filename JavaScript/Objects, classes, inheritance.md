@@ -21,7 +21,7 @@ delete user.age
 Using multiword property name:
 ```
 let user = {
-   "likes birds": true
+  "likes birds": true
 }
 ```
 
@@ -34,8 +34,8 @@ computed property:
 ```
 const key = name
 let user = {
-   [key]: lu,
-   [key + 'Computers']: 5 // user.nameComputers = 5
+  [key]: lu,
+  [key + 'Computers']: 5 // user.nameComputers = 5
 }
 
 user[key] = 'an'
