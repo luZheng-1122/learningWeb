@@ -369,6 +369,11 @@ In any case, methods listed in the class declaration become members of its `prot
 
 Static function will not be added to MyClass.prototype. Meaning that the static function cannot be inheritanced by any instance created by this class. Only the class itself can use this static function.
 
+### Private and protected properties and methods
+* Protected fields start with _. That’s a well-known convention, not enforced at the language level. Programmers should only access a 
+field starting with _ from its class and classes inheriting from it.
+* Private fields start with #. Javascript makes sure we only can access those from inside the class.
+
 ## Class inheritance, super
 ### super
 

@@ -600,4 +600,177 @@ If you change user after binding, it will not affect the binded one, `sayHi()` w
 
 ## Currying and partials
 
+### partial function application
+We can bind not only this, but also arguments. full syntax of bind:
+```
+let bound = func.bind(context, arg1, arg2, ...);
+
+// such as:
+function mul(a, b) {
+  return a * b;
+}
+let double = mul.bind(null, 2);
+alert( double(3) ); // = mul(2, 3) = 6
+```
+
+In other cases, partial application is useful when we have a very generic function, and want a less universal variant of it for convenience.
+
+For instance, we have a function send(from, to, text). Then, inside a user object we may want to use a partial variant of it: sendTo(to, text) that sends from the current user.
+
+a partial function for binding only arguments can be easily implemented.
+```
+function partial(func, ...argsBound) {
+  return function(...args) { // (*)
+    return func.call(this, ...argsBound, ...args);
+  }
+}
+
+// Usage:
+let user = {
+  firstName: "John",
+  say(time, phrase) {
+    alert(`[${time}] ${this.firstName}: ${phrase}!`);
+  }
+};
+
+// add a partial method that says something now by fixing the first argument
+user.sayNow = partial(user.say, new Date().getHours() + ':' + new Date().getMinutes());
+
+user.sayNow("Hello");
+// Something like:
+// [10:00] John: Hello!
+```
+lodash has implemented with _.partial
+
+### Currying
+Currying is translating a function from callable as f(a, b, c) into callable as f(a)(b)(c).
+```
+function curry(func) {
+  return function(a) {
+    return function(b) {
+      return func(a, b);
+    };
+  };
+}
+
+// usage
+function sum(a, b) {
+  return a + b;
+}
+
+let carriedSum = curry(sum);
+
+alert( carriedSum(1)(2) ); // 3
+```
+
+Example:
+```
+function log(date, importance, message) {
+  alert(`[${date.getHours()}:${date.getMinutes()}] [${importance}] ${message}`);
+}
+log = _.curry(log);
+
+// todayLog will be the partial of log with fixed first argument
+let todayLog = log(new Date());
+
+// use it
+todayLog("INFO", "message"); // [HH:mm] INFO message
+```
+
 ## Arrow functions revisited
+Arrow functions are not just a “shorthand” for writing small stuff.
+
+JavaScript is full of situations where we need to write a small function, that’s executed somewhere else.
+
+For instance:
+
+* arr.forEach(func) – func is executed by forEach for every array item.
+* setTimeout(func) – func is executed by the built-in scheduler.
+…there are more.
+It’s in the very spirit of JavaScript to create a function and pass it somewhere.
+
+And in such functions we usually don’t want to leave the current context.
+
+Arrow functions:
+
+* Do not have this.
+* Do not have arguments.
+* Can’t be called with new.
+* (They also don’t have super, but we didn’t study it. Will be in the chapter Class inheritance).
+
+That’s because they are meant for short pieces of code that do not have their own “context”, but rather works in the current one. And they really shine in that use case.
+
+## Generator
+Regular functions return only one, single value (or nothing).
+
+Generators can return (“yield”) multiple values, possibly an infinite number of values, one after another, on-demand. They work great with iterables, allowing to create data streams with ease.
+
+### generator function
+```
+function* generateSequence() {
+  yield 1;
+  yield 2;
+  return 3;
+}
+```
+When generateSequence() is called, it does not execute the code. Instead, it returns a special object, called “generator”. The generator object can be perceived as a “frozen function call”. The main method of a generator is next(). When called, it resumes execution till the nearest yield `value` statement. Then the execution pauses, and the value is returned to the outer code.
+```
+function* generateSequence() {
+  yield 1;
+  yield 2;
+  return 3;
+}
+
+let generator = generateSequence();
+
+let one = generator.next();
+
+alert(JSON.stringify(one)); // {value: 1, done: false}
+
+// done is true when reach the return statement
+let three = generator.next();
+
+alert(JSON.stringify(three)); // {value: 3, done: true}
+```
+### Converting Symbol.iterator to generator
+```
+let range = {
+  from: 1,
+  to: 5,
+
+  *[Symbol.iterator]() { // a shorthand for [Symbol.iterator]: function*()
+    for(let value = this.from; value <= this.to; value++) {
+      yield value;
+    }
+  }
+};
+
+alert( [...range] ); // 1,2,3,4,5
+```
+The range object is now iterable.  Generators aim to make iterables easier, so we can see that.
+
+### “yield” is a two-way road
+```
+function* gen() {
+  // Pass a question to the outer code and wait for an answer
+  let result = yield "2 + 2?"; // (*)
+
+  alert(result);
+}
+
+let generator = gen();
+
+let question = generator.next().value; // <-- yield returns the value
+
+generator.next(4); // --> pass the result into the generator
+```
+
+### summary
+* Generators are created by generator functions function*(…) {…}.
+* Inside generators (only) there exists a yield operator.
+* The outer code and the generator may exchange results via next/yield calls.
+In modern Javascript, generators are rarely used. But sometimes they come in handy, because the ability of a function to exchange data with the calling code during the execution is quite unique.
+
+Also, in the next chapter we’ll learn async generators, which are used to read streams of asynchronously generated data in for loop.
+
+In web-programming we often work with streamed data, e.g. need to fetch paginated results, so that’s a very important use case.
