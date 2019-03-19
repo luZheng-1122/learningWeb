@@ -270,3 +270,69 @@ The function execution “pauses” at the line (*) and resumes when the promise
 Let’s emphasize: await literally makes JavaScript wait until the promise settles, and then go on with the result. That doesn’t cost any CPU resources, because the engine can do other jobs meanwhile: execute other scripts, handle events etc.
 
 It’s just a more elegant syntax of getting the promise result than promise.then, easier to read and write.
+
+# async generator
+So far we’ve seen simple examples, to gain basic understanding. Now let’s review a real-life use case.
+
+There are many online APIs that deliver paginated data. For instance, when we need a list of users, then we can fetch it page-by-page: a request returns a pre-defined count (e.g. 100 users), and provides an URL to the next page.
+
+The pattern is very common, it’s not about users, but just about anything. For instance, Github allows to retrieve commits in the same, paginated fasion:
+
+* We should make a request to URL in the form https://api.github.com/repos/<repo>/commits.
+* It responds with a JSON of 30 commits, and also provides a link to the next page in the Link header.
+* Then we can use that link for the next request, to get more commits, and so on.
+What we’d like to have is an iterable source of commits, so that we could use it like this:
+```
+let repo = 'iliakan/javascript-tutorial-en'; // Github repository to get commits from
+
+for await (let commit of fetchCommits(repo)) {
+  // process commit
+}
+```
+We’d like fetchCommits to get commits for us, making requests whenever needed. And let it care about all pagination stuff, for us it’ll be a simple for await..of.
+
+With async generators that’s pretty easy to implement:
+```
+async function* fetchCommits(repo) {
+  let url = `https://api.github.com/repos/${repo}/commits`;
+
+  while (url) {
+    const response = await fetch(url, { // (1)
+      headers: {'User-Agent': 'Our script'}, // github requires user-agent header
+    });
+
+    const body = await response.json(); // (2) parses response as JSON (array of commits)
+
+    // (3) the URL of the next page is in the headers, extract it
+    let nextPage = response.headers.get('Link').match(/<(.*?)>; rel="next"/);
+    nextPage = nextPage && nextPage[1];
+
+    url = nextPage;
+
+    for(let commit of body) { // (4) yield commits one by one, until the page ends
+      yield commit;
+    }
+  }
+}
+```
+1. We use the browser fetch method to download from a remote URL. It allows to supply authorization and other headers if needed, here Github requires User-Agent.
+2. The fetch result is parsed as JSON, that’s again a fetch-specific method.
+3. We can get the next page URL from the Link header of the response. It has a special format, so we use a regexp for that. The next page URL may look like this: https://api.github.com/repositories/93253246/commits?page=2, it’s generatd by Github itself.
+4. Then we yield all commits received, and when they finish – the next while(url) iteration will trigger, making one more request.
+An example of use (shows commit authors in console):
+```
+(async () => {
+
+  let count = 0;
+
+  for await (const commit of fetchCommits('iliakan/javascript-tutorial-en')) {
+
+    console.log(commit.author.login);
+
+    if (++count == 100) { // let's stop at 100 commits
+      break;
+    }
+  }
+
+})();
+```
