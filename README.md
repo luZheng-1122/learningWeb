@@ -16,6 +16,26 @@
 
 ## Node.js, MVC, MongoDB, backend integration, RESTful API/GraphQL
 
+### RESTful API
+
+(what is a restful api)[https://medium.com/@lazlojuly/what-is-a-restful-api-fabb8dc2afeb]
+
+It is really just the architecture, plus a set of constraints applied on the architecture producing the desired architecture.
+
+By applying these constraints, we end up with a desired architecture which is optimised for the common use cases.
+
+### GraphQL
+
+(what is graphql)[https://medium.com/devgorilla/what-is-graphql-f0902a959e4]
+
+GraphQL is a syntax that describes how to ask for data, and is generally used to load data from a server to a client. GraphQL has three main characteristics:
+
+* It lets the client specify exactly what data it needs.
+* It makes it easier to aggregate data from multiple sources.
+* It uses a type system to describe data.
+
+**(RESTful VS GraphQL)[https://medium.com/good-api/rest-vs-graphql-a-critical-review-5f77392658e7]**
+
 ## Performance, security
 
 ## Testing tool, test driven

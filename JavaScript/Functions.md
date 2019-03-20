@@ -208,6 +208,7 @@ alert( counter1() ); // 1
 alert( counter2() ); // 0 (independent)
 ```
 More example: https://javascript.info/closure
+https://medium.com/dailyjs/i-never-understood-javascript-closures-9663703368e8
 
 ## The old var
 

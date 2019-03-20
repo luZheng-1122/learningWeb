@@ -336,3 +336,5 @@ An example of use (shows commit authors in console):
 
 })();
 ```
+
+TODO: performance
