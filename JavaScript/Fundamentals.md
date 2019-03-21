@@ -414,8 +414,8 @@ Note that the function takes 3 arguments: The item value, The item index, The ar
   * `number`
   * `string`
   * `boolean`
-  * `null`: for unknown values – a standalone type that has a single value null.
-  * `undefined`: or unassigned values – a standalone type that has a single value undefined.
+  * `null`: for unknown values – a standalone type that has a single value null. It’s just a special value which represents “nothing”, “empty” or “value unknown”.
+  * `undefined`: or unassigned values – a standalone type that has a single value undefined. The meaning of undefined is “value is not assigned”.
   * `object`
   * `symbol`: for unique identifiers. Enabled by ES6.
   

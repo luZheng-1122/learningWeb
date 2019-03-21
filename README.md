@@ -18,7 +18,7 @@
 
 ### RESTful API
 
-(what is a restful api)[https://medium.com/@lazlojuly/what-is-a-restful-api-fabb8dc2afeb]
+[what is a restful api](https://medium.com/@lazlojuly/what-is-a-restful-api-fabb8dc2afeb)
 
 It is really just the architecture, plus a set of constraints applied on the architecture producing the desired architecture.
 
@@ -26,7 +26,7 @@ By applying these constraints, we end up with a desired architecture which is op
 
 ### GraphQL
 
-(what is graphql)[https://medium.com/devgorilla/what-is-graphql-f0902a959e4]
+[what is graphql](https://medium.com/devgorilla/what-is-graphql-f0902a959e4)
 
 GraphQL is a syntax that describes how to ask for data, and is generally used to load data from a server to a client. GraphQL has three main characteristics:
 
@@ -34,7 +34,7 @@ GraphQL is a syntax that describes how to ask for data, and is generally used to
 * It makes it easier to aggregate data from multiple sources.
 * It uses a type system to describe data.
 
-**(RESTful VS GraphQL)[https://medium.com/good-api/rest-vs-graphql-a-critical-review-5f77392658e7]**
+**[RESTful VS GraphQL](https://medium.com/good-api/rest-vs-graphql-a-critical-review-5f77392658e7)**
 
 ## Performance, security
 
@@ -42,6 +42,7 @@ GraphQL is a syntax that describes how to ask for data, and is generally used to
 
 ## Dev tools
 * React/redux dev tools
+* debuging tools
 
 ## Third-party library
 * [Async]()
@@ -49,7 +50,7 @@ GraphQL is a syntax that describes how to ask for data, and is generally used to
 * [Lodash](https://lodash.com)
 * [axios.js]()
 * how npm/yarn works
- 
+
 ## SCSS, SASS, Webpack, env build, Git, CI/CD, AWS, Docker
 
 ## Agile experience
