@@ -10,7 +10,7 @@
 * MaterialUI
 * Ant design
 
-## Network protocol
+## Network protocol, VPN
 
 ## Cross-browser compatibility
 
