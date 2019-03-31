@@ -20,7 +20,7 @@
 7. this 的用法
 8. prototype inheritance
 9. coding style: es-lint (airbnb), function usage [JSDoc](https://github.com/jsdoc3/jsdoc)
-10. refact loop:
+10. refactor loop:
     1.  when need to iterate an array: use forEach, for, for...of
     2.  when need to iterate and return a new array: use map
     3.  when need to calculate a singe value: use reduce
@@ -54,3 +54,4 @@
 
 ## devops
 1. build react project (webpack, babel)
+2. npm

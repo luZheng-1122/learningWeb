@@ -301,24 +301,33 @@ it.next();
 ```
 
 ## Modules
-```
-function foo(..) {
-	// ..
-}
+[modules](https://javascript.info/modules-intro)
+### pre-es6 
+```JavaScript
+// exports:
+module.exports = Util
 
-export default foo; 
-//  you are exporting a binding to the function expression value at that moment, not to the identifier foo. 
-//If you later assign foo to a different value inside your module, the module import still reveals the function originally exported, not the new value.
-
-export { foo as default }; 
-// In this version of the module export, the default export binding is actually to the foo identifier rather than its value, 
-// so you get the previously described binding behavior (i.e., if you later change foo's value, the value seen on the import side will also be updated).
+// imports:
+const Util = require('./util.js');
 ```
-```
-import foo from "foo";
+TODO: why change?
 
-// or:
-import { default as foo } from "foo";
+### after es6
+
+```JavaScript
+// not use default:
+export function Util;
+import { Util } from './util.js';
+
+export {sayHi, sayBye};
+import {sayHi, sayBye} from './say.js'; 
+// or 
+import * as say from './say.js';
+say.sayHi();
+
+// use default:
+export default function Util;
+import anyName from './util.js'
 ```
 
 ## Classes
