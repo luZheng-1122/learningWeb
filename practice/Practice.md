@@ -20,11 +20,11 @@
 7. this 的用法
 8. prototype inheritance
 9. coding style: es-lint (airbnb), function usage [JSDoc](https://github.com/jsdoc3/jsdoc)
-10. refact loop:
-      1.  when need to iterate an array: use forEach, for, for...of
-      2.  when need to iterate and return a new array: use map
-      3.  when need to calculate a singe value: use reduce
-      11. refactor time difference measurement, with Date.now()
+10. refactor loop:
+    1.  when need to iterate an array: use forEach, for, for...of
+    2.  when need to iterate and return a new array: use map
+    3.  when need to calculate a singe value: use reduce
+11. refactor time difference measurement, with Date.now()
 12. refactor JSON.stringfy(value, replacer): replacer can help you select the keys you want or passing a mapping function as replacer to convert any value.
 13. refactor with rest and spread operator
 14. refactor with destructuring
@@ -60,3 +60,4 @@
 
 ## devops
 1. build react project (webpack, babel)
+2. npm
