@@ -41,8 +41,10 @@ GraphQL is a syntax that describes how to ask for data, and is generally used to
 ## Testing tool, test driven
 
 ## Dev tools
+
 * React/redux dev tools
 * debuging tools
+* [dotenv](https://github.com/motdotla/dotenv): Loads environment variables from .env for nodejs projects.
 
 ## Third-party library
 * [Async]()
@@ -70,12 +72,23 @@ GraphQL is a syntax that describes how to ask for data, and is generally used to
 https://tallyfy.com/uml-diagram/
 
 ## Operating System
+
 ### Linux, Shell, Bash, relation with MacOS
+
 * Linux是Unix-like
 * MacOS是基于Unix开发的操作系统
 * Shell是包裹在上述系统内核层外的壳，它提供了一种语言，这种语言可以让外界用户与操作系统内核沟通。Bash是一种实现了Shell功能的软件，这种软件目前是很多unix-like及MaxOS的默认Shell软件。
+* homebrew
+* environment: 当你在安装工具时，默认会安装在`/usr/local/bin`目录下面。环境变量的意思是，添加或修改某个工具（语言）需要的变量。你可以在不同的文件环境里面修改变量，这些变量就只在这个目录下面有效。你也可以在`.bash_profile`里面添加修改变量，这些变量就会变成整个系统都可用的值（`.bash_profile`是定义在用户级下面的，不同用户之间不共享这个文件）。
 
-file system
+* linux/unix beginner tutorial:
+
+1. https://www.guru99.com/unix-linux-tutorial.html
+2. https://www.tutorialspoint.com/unix/unix-communication.htm
+3. https://www.linux.org/forums/linux-beginner-tutorials.123/
+
+### file system
+
 ### CPU, storage, network
 
 ## Interview Oriented

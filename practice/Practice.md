@@ -21,15 +21,21 @@
 8. prototype inheritance
 9. coding style: es-lint (airbnb), function usage [JSDoc](https://github.com/jsdoc3/jsdoc)
 10. refact loop:
-    1.  when need to iterate an array: use forEach, for, for...of
-    2.  when need to iterate and return a new array: use map
-    3.  when need to calculate a singe value: use reduce
-11. refactor time difference measurement, with Date.now()
+      1.  when need to iterate an array: use forEach, for, for...of
+      2.  when need to iterate and return a new array: use map
+      3.  when need to calculate a singe value: use reduce
+      11. refactor time difference measurement, with Date.now()
 12. refactor JSON.stringfy(value, replacer): replacer can help you select the keys you want or passing a mapping function as replacer to convert any value.
 13. refactor with rest and spread operator
 14. refactor with destructuring
 15. refactor with default parameter values
 16. logical operator refactor
+17. Recursive traversals
+18. [READ] custome properties: https://stackoverflow.com/a/20734003
+19. [READ] The lodash library creates a main function _. and then add _.clone and other properties to the main. They do it to lessen their pollution of the global space.
+20. decorator and forwarding
+21. function binding
+22. curring and partial
 
 ## React
 1. authentication
@@ -38,7 +44,7 @@
 4. upload image
 5. access control
 6. locally testing (end to end, unit snapshot, code usage) and CICD testing
-7. input validation 
+7. input validation
 8. loading indicators
 9. pagination (different pags or feed flow)
 
