@@ -2,6 +2,17 @@
 
 ## Javascript/ES6, DOM
 
+## Html fundamentals
+
+### Html forms
+
+HTML forms provide three methods of encoding.
+
+* application/x-www-form-urlencoded (the default)
+* multipart/form-data
+* text/plain
+
+
 ## CSS3, Responsive web design
 
 ## React, React Native (Mobile H5)
@@ -39,6 +50,13 @@ GraphQL is a syntax that describes how to ask for data, and is generally used to
 ## Performance, security
 
 ## Testing tool, test driven
+
+### Behaviour Driven Development
+
+* what is BDD: https://www.agilealliance.org/glossary/bdd/#q=~
+* user stories: https://www.agilealliance.org/glossary/user-stories/#q=~
+* write user stories with 'Given – When – Then': https://www.agilealliance.org/glossary/gwt/#q=~
+* use cucumber to transform requirements from user stories to test cases: Cucumber reads executable specifications written in plain text and validates that the software does what those specifications say. https://docs.cucumber.io/guides/overview/
 
 ## Dev tools
 
