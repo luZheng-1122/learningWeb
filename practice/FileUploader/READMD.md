@@ -34,6 +34,9 @@ req.send(formData);
 Use Formidable
 Include the Formidable module to be able to parse the uploaded file once it reaches the server.
 
+TODO:
+where the file will be stored?
+
 ## Modern way
 
 ### React
@@ -53,5 +56,11 @@ This will make a POST request with `form-data` format
 
 ### Node.js
 
-[multer](Node.js middleware for handling `multipart/form-data`.)
+[multer](https://github.com/expressjs/multer): Node.js middleware for handling `multipart/form-data`.
+[multer-s3](https://www.npmjs.com/package/multer-s3): s3 storage for multer
 
+### base64 and cssSprite
+
+[base64](https://www.cnblogs.com/coco1s/p/4375774.html)
+[cssSprite](https://thinking80s.iteye.com/blog/685006)
+[comparision](https://zhuanlan.zhihu.com/p/24315362)
