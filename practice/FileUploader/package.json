@@ -1,0 +1,20 @@
+{
+   "name": "react-image-crop-demo",
+   "version": "1.0.0",
+   "description": "A basic demo of react-image-crop. https://github.com/DominicTobias/react-image-crop",
+   "keywords": [],
+   "main": "src/index.js",
+   "dependencies": {
+      "react": "16.5.0",
+      "react-dom": "16.5.0",
+      "react-image-crop": "6.0.12",
+      "react-scripts": "1.1.4"
+   },
+   "devDependencies": {},
+   "scripts": {
+      "start": "react-scripts start",
+      "build": "react-scripts build",
+      "test": "react-scripts test --env=jsdom",
+      "eject": "react-scripts eject"
+   }
+}

@@ -52,7 +52,11 @@ return {
 }
 ```
 
-This will make a POST request with `form-data` format
+This will make a POST request with `form-data` format.
+
+#### Tool for corping image: React image Crop
+
+[React Image Crop](https://github.com/DominicTobias/react-image-crop)
 
 ### Node.js
 
