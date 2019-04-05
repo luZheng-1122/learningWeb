@@ -2,8 +2,11 @@
 
 ## TypeScript
 
-## Cache
+## Cache, Cookie
+
 https://github.com/ljianshu/Blog/issues/23
+
+## 
 
 ## 'use strict' features
 

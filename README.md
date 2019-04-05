@@ -23,6 +23,16 @@ HTML forms provide three methods of encoding.
 
 ## Network protocol, VPN
 
+* https://mp.weixin.qq.com/s/X7DhDcb4F7ojpPGj79JrMQ
+
+### http
+
+https://read.douban.com/reader/ebook/12054542/?from=book
+
+### domain name and DNS
+
+* https://hackernoon.com/what-actually-happens-when-you-buy-a-domain-name-9c996d352af3
+
 ## Cross-browser compatibility
 
 ## Node.js, MVC, MongoDB, backend integration, RESTful API/GraphQL
@@ -84,6 +94,13 @@ GraphQL is a syntax that describes how to ask for data, and is generally used to
 * Facade Pattern
 * 面向对象有三个要素：封装（Encapsulation）、继承（Inheritance）和多态（Polymorphism
 * Programming paradigm: OOP, functional ...
+
+### functional programming
+
+Functional programming (often abbreviated FP) is the process of building software by composing pure functions, avoiding shared state, mutable data, and side-effects.
+TODO: 
+* https://medium.com/javascript-scene/master-the-javascript-interview-what-is-functional-programming-7f218c68b3a0
+* https://medium.freecodecamp.org/an-introduction-to-the-basic-principles-of-functional-programming-a2c2a15c84
 
 ## Documentation
 ### UML diagram for high-level architecture

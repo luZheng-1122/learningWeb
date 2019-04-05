@@ -38,6 +38,7 @@
 22. curring and partial
 
 ## React
+
 1. authentication
 2. international
 3. localstorage practice
@@ -49,9 +50,11 @@
 9. pagination (different pags or feed flow)
 
 ## html/css
+
 1. modal window
 
 ## Node.js + RESTful
+
 1. MVC
 2. epxress server
 3. connect db
@@ -59,5 +62,6 @@
 5. locally testing (unit test) and CICD testing
 
 ## devops
+
 1. build react project (webpack, babel)
 2. npm
