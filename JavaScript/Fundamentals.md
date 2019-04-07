@@ -5,6 +5,8 @@ ECMA compatibility table: https://kangax.github.io/compat-table/es6/
 
 New features in ES6:
 
+* https://github.com/lukehoban/es6features#readme
+
 ## Block-Scoped Declarations
 
 let and const: [w3c let and const](https://www.w3schools.com/js/js_let.asp)
@@ -302,18 +304,28 @@ it.next();
 
 ## Modules
 [modules](https://javascript.info/modules-intro)
-### pre-es6 
+* comparision: https://medium.com/computed-comparisons/commonjs-vs-amd-vs-requirejs-vs-es6-modules-2e814b114a0b
+* babel modules: https://babeljs.io/docs/en/learn
+* https://medium.com/the-node-js-collection/an-update-on-es6-modules-in-node-js-42c958b890c
+ 
+### CommonJS implementation
+same in Node.js:
 ```JavaScript
 // exports:
 module.exports = Util
 
-// imports:
+// require:
 const Util = require('./util.js');
+
+// dynamic require:
+if (true) const obj = require('./object.js')
+
+// require json file:
+const config = require('./config.json')
 ```
-TODO: why change?
 
 ### after es6
-
+es6 introduced the native javascript modules:
 ```JavaScript
 // not use default:
 export function Util;
@@ -328,6 +340,11 @@ say.sayHi();
 // use default:
 export default function Util;
 import anyName from './util.js'
+
+// dynamic import is not a part of ES2015, so this feature has not been supported by babel 7+.
+// https://babeljs.io/docs/en/learn
+
+// cannot import json file.
 ```
 
 ## Classes
