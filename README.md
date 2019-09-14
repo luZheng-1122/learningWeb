@@ -17,6 +17,10 @@ HTML forms provide three methods of encoding.
 
 ## React, React Native (Mobile H5)
 
+* debug: http://facebook.github.io/react-native/docs/debugging.html#content
+* https://stackoverflow.com/questions/29289304/how-do-you-debug-react-native?page=1&tab=votes#tab-top
+* react and redux: https://yuedu.baidu.com/ebook/13a8a560bdd126fff705cc1755270722192e5938
+
 ## UI Library, Graph Library
 * MaterialUI
 * Ant design
