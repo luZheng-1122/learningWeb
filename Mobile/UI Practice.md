@@ -1,0 +1,1 @@
+1. fixed footer in a scrollview: https://stackoverflow.com/a/31249011

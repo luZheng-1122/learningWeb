@@ -2,6 +2,8 @@
 
 ## clone with SSH & clone with HTTPS
 
+## master and origin/master
+
 ## git switch username and email
 
 ## git set remote url
@@ -27,4 +29,5 @@ git push -u origin master
 ```
 
 ## git Submodules
+
 https://git-scm.com/book/en/v2/Git-Tools-Submodules
