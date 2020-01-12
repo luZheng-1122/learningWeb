@@ -40,6 +40,8 @@ Good for simple mobile apps which requires little hardware supports
 
 ## Android, iOS compatbility
 
+1. Android SDK version
+
 ## Typescript
 
 ## GraphQL
